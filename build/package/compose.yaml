@@ -1,0 +1,27 @@
+services:
+
+  # Databases
+  # Auth DBs
+  auth-mysql:
+    image: mysql
+    container_name: auth-mysql
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTH_MYSQL_PORT}:${AUTH_MYSQL_PORT}"
+    environment:
+      - MYSQL_ROOT_PASSWORD= ${AUTH_MYSQL_ROOT_PASSWORD}
+
+  auth-mongodb:
+    image: mongo
+    container_name: auth-mongodb
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTH_MONGO_PORT}:${AUTH_MONGO_PORT}"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_USERNAME}
+networks:
+  ecommerce:
+    driver: bridge

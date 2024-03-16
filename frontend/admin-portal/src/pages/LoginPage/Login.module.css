@@ -1,0 +1,53 @@
+.loginPage{
+    display: flex;
+    flex-direction: row;
+}
+
+.loginForm{
+    padding: 30px;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.signUpBtn{
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: right;
+}
+
+.form{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+input{
+    height: 27px;
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 10px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;    
+    
+}
+
+button{
+    height: 30px;
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 100%;
+    background-color: black;
+    color: white;
+}
+
+
