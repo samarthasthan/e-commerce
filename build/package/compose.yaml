@@ -8,7 +8,7 @@ services:
     networks:
       - ecommerce
     ports:
-      - "${AUTH_MYSQL_PORT}:${AUTH_MYSQL_PORT}"
+      - "${AUTH_MYSQL_PORT}:3306"
     environment:
       - MYSQL_ROOT_PASSWORD= ${AUTH_MYSQL_ROOT_PASSWORD}
 
@@ -18,10 +18,60 @@ services:
     networks:
       - ecommerce
     ports:
-      - "${AUTH_MONGO_PORT}:${AUTH_MONGO_PORT}"
+      - "${AUTH_MONGO_PORT}:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_USERNAME}
+
+  auth-redis:
+    image: redis
+    container_name: auth-redis
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTH_REDIS_PORT}:6379"
+
+  # Broker 
+  # broker:
+  #   build:
+  #     context: ../../
+  #     dockerfile: ./cmd/broker/Dockerfile
+  #   container_name: broker
+  #   networks:
+  #     - ecommerce
+  #   ports:
+  #     - 8000:8000
+  #   command: [ "./app" ]
+  #   depends_on:
+  #     - grafana
+  #   logging:
+  #     driver: loki
+  #     options:
+  #       loki-url: "http://loki:3100/loki/api/v1/push"
+
+  # Metrics, Logging and Tracing
+  loki:
+    image: grafana/loki
+    container_name: loki
+    networks:
+      - ecommerce
+    ports:
+      - "3100:3100"
+
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    networks:
+      - ecommerce
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ../../config/grafana/datasources/automatic.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
 networks:
   ecommerce:
     driver: bridge
