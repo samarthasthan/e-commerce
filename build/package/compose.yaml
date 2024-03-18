@@ -21,7 +21,7 @@ services:
       - "${AUTH_MONGO_PORT}:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
 
   auth-redis:
     image: redis
@@ -31,23 +31,33 @@ services:
     ports:
       - "${AUTH_REDIS_PORT}:6379"
 
-  # Broker 
-  # broker:
-  #   build:
-  #     context: ../../
-  #     dockerfile: ./cmd/broker/Dockerfile
-  #   container_name: broker
-  #   networks:
-  #     - ecommerce
-  #   ports:
-  #     - 8000:8000
-  #   command: [ "./app" ]
-  #   depends_on:
-  #     - grafana
-  #   logging:
-  #     driver: loki
-  #     options:
-  #       loki-url: "http://loki:3100/loki/api/v1/push"
+  #Broker 
+  broker:
+    build:
+      context: ../../
+      dockerfile: ./cmd/broker/Dockerfile
+    container_name: broker
+    networks:
+      - ecommerce
+    ports:
+      - 8000:8000
+    command: [ "./app" ]
+    depends_on:
+      - grafana
+
+  #Authentication
+  authentication:
+    build:
+      context: ../../
+      dockerfile: ./cmd/authentication/Dockerfile
+    container_name: authentication
+    networks:
+      - ecommerce
+    ports:
+      - 8001:8001
+    command: [ "./app" ]
+    depends_on:
+      - grafana
 
   # Metrics, Logging and Tracing
   loki:
@@ -71,7 +81,21 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     volumes:
-      - ../../config/grafana/datasources/automatic.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ../../config/grafana:/etc/grafana/provisioning
+      - ../../config/grafana/dashboards:/var/lib/grafana/dashboards
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    networks:
+      - ecommerce
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
 networks:
   ecommerce:
     driver: bridge

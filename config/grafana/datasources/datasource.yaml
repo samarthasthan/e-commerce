@@ -13,3 +13,13 @@ datasources:
   basicAuth: false
   isDefault: true
   readOnly: true
+
+- name: prometheus
+  type: prometheus
+  typeName: prometheus
+  access: proxy
+  url: http://prometheus:9090
+  basicAuth: false
+  isDefault: false
+  readOnly: true
+

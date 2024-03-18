@@ -4,4 +4,4 @@ import (
 	"github.com/samarthasthan/e-commerce/utils"
 )
 
-var log = utils.NewLogger("aauthentication")
+var log = utils.NewLogger("authentication")
