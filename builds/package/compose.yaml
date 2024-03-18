@@ -35,7 +35,7 @@ services:
   broker:
     build:
       context: ../../
-      dockerfile: ./cmd/broker/Dockerfile
+      dockerfile: ./docker/broker/Dockerfile
     container_name: broker
     networks:
       - ecommerce
@@ -49,7 +49,7 @@ services:
   authentication:
     build:
       context: ../../
-      dockerfile: ./cmd/authentication/Dockerfile
+      dockerfile: ./docker/authentication/Dockerfile
     container_name: authentication
     networks:
       - ecommerce
@@ -58,6 +58,82 @@ services:
     command: [ "./app" ]
     depends_on:
       - grafana
+
+  #Order
+  order:
+    build:
+      context: ../../
+      dockerfile: ./docker/order/Dockerfile
+    container_name: order
+    networks:
+      - ecommerce
+    ports:
+      - 8002:8002
+    command: [ "./app" ]
+    depends_on:
+      - grafana
+
+  #Payment
+  payment:
+    build:
+      context: ../../
+      dockerfile: ./docker/payment/Dockerfile
+    container_name: payment
+    networks:
+      - ecommerce
+    ports:
+      - 8003:8003
+    command: [ "./app" ]
+    depends_on:
+      - grafana
+
+  #Product
+  product:
+    build:
+      context: ../../
+      dockerfile: ./docker/product/Dockerfile
+    container_name: product
+    networks:
+      - ecommerce
+    ports:
+      - 8004:8004
+    command: [ "./app" ]
+    depends_on:
+      - grafana
+
+  #Frontend
+  #Admin portal
+  admin-portal:
+    build:
+      context: ../../
+      dockerfile: ./docker/frontend/admin-portal/Dockerfile
+    container_name: admin-portal
+    networks:
+      - ecommerce
+    ports:
+      - "3000:3000"
+
+  #Seller portal
+  seller-portal:
+    build:
+      context: ../../
+      dockerfile: ./docker/frontend/seller-portal/Dockerfile
+    container_name: seller-portal
+    networks:
+      - ecommerce
+    ports:
+      - "3001:3000"
+
+  #Website
+  website:
+    build:
+      context: ../../
+      dockerfile: ./docker/frontend/website/Dockerfile
+    container_name: website
+    networks:
+      - ecommerce
+    ports:
+      - "3002:3000"
 
   # Metrics, Logging and Tracing
   loki:
@@ -74,12 +150,14 @@ services:
     networks:
       - ecommerce
     ports:
-      - "3000:3000"
+      - "3200:3000"
     depends_on:
       - loki
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SECURITY_ADMIN_USER=samarth
+      - GF_SECURITY_ADMIN_PASSWORD=password
     volumes:
       - ../../config/grafana:/etc/grafana/provisioning
       - ../../config/grafana/dashboards:/var/lib/grafana/dashboards
@@ -95,7 +173,7 @@ services:
       - 9090:9090
     restart: unless-stopped
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ../../config/prometheus:/etc/prometheus
 networks:
   ecommerce:
     driver: bridge

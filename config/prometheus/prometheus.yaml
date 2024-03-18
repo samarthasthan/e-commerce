@@ -21,3 +21,6 @@ scrape_configs:
     # - prometheus:9090
     - broker:8000
     - authentication:8001
+    - order:8002
+    - payment:8003
+    - product:8004
