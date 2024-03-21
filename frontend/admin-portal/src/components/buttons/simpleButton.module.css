@@ -9,7 +9,3 @@
   justify-content: center;
   border: 1px solid var(--border-color);
 }
-
-.simpleButton:hover {
-  background-color: var(--border-color) !important;
-}

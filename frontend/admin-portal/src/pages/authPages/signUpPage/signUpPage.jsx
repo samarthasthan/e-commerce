@@ -1,29 +1,29 @@
 import React from "react";
-import styles from "./loginPage.module.css";
+import styles from "./signUp.module.css";
 import AuthHeader from "../../../components/headers/authHeader/authHeader";
 import SimpleButton from "../../../components/buttons/simpleButton";
 import TextInput from "../../../components/inputs/textInput/textInput";
 import { Link } from "react-router-dom";
 
-function LoginPage() {
+function SignUpPage() {
   return (
-    <div className={styles.loginPage}>
+    <div className={styles.signUpPage}>
       <AuthHeader></AuthHeader>
-      <div className={styles.loginPageContent}>
-        <div className={styles.signUpButton}>
-          <Link to={`/signup`}>
+      <div className={styles.signUpPageContent}>
+        <div className={styles.loginButton}>
+          <Link to={`/`}>
             <SimpleButton
               backgroundColor="var(--white-color)"
               color="var(--black-color)"
             >
-              Sign Up
+              Login
             </SimpleButton>
           </Link>
         </div>
-        <form action="" className={styles.loginForm}>
-          <h2>Login into your account</h2>
+        <form action="" className={styles.signUpForm}>
+          <h2>Create an account</h2>
           <p className="greyText">
-            Enter your email and password below to login into your account
+            Enter your email below to create your account
           </p>
           <TextInput type="email">name@example.com</TextInput>
           <TextInput type="password">password123</TextInput>
@@ -31,13 +31,7 @@ function LoginPage() {
             backgroundColor="var(--black-color)"
             color="var(--white-color)"
           >
-            Login
-          </SimpleButton>
-          <SimpleButton
-            backgroundColor="var(--white-color)"
-            color="var(--black-color)"
-          >
-            Forgot password
+            Sign up with Email
           </SimpleButton>
           <p className="greyText">
             By clicking continue, you agree to our{" "}
@@ -56,4 +50,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignUpPage;
