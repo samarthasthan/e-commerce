@@ -1,0 +1,41 @@
+.loginPage {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.signUpButton {
+  align-self: flex-end;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 450px;
+}
+
+.loginPageContent {
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 5vmin;
+}
+
+@media (max-width: 767px) {
+  .loginPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .loginPageContent {
+    width: auto;
+    height: 100%;
+  }
+  .bottom {
+    height: 50px;
+  }
+}

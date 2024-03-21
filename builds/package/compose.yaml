@@ -3,7 +3,7 @@ services:
   # Databases
   # Auth DBs
   auth-mysql:
-    image: mysql
+    image: mysql:8.3.0
     container_name: auth-mysql
     networks:
       - ecommerce
@@ -13,7 +13,7 @@ services:
       - MYSQL_ROOT_PASSWORD= ${AUTH_MYSQL_ROOT_PASSWORD}
 
   auth-mongodb:
-    image: mongo
+    image: mongo:7.0.7
     container_name: auth-mongodb
     networks:
       - ecommerce
@@ -24,7 +24,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
 
   auth-redis:
-    image: redis
+    image: redis:7.2.4-alpine
     container_name: auth-redis
     networks:
       - ecommerce
