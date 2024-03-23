@@ -1,5 +1,4 @@
 services:
-
   # Databases
   # Auth DBs
   auth-mysql:
@@ -8,9 +7,9 @@ services:
     networks:
       - ecommerce
     ports:
-      - "${AUTH_MYSQL_PORT}:3306"
+      - 1248:3306
     environment:
-      - MYSQL_ROOT_PASSWORD= ${AUTH_MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${AUTH_MYSQL_ROOT_PASSWORD}
 
   auth-mongodb:
     image: mongo:7.0.7
@@ -31,17 +30,18 @@ services:
     ports:
       - "${AUTH_REDIS_PORT}:6379"
 
-  #Broker 
+  #Broker
   broker:
     build:
       context: ../../
       dockerfile: ./docker/broker/Dockerfile
     container_name: broker
+    image: ecommerce/broker
     networks:
       - ecommerce
     ports:
       - 8000:8000
-    command: [ "./app" ]
+    command: ["./app"]
     depends_on:
       - grafana
 
@@ -51,11 +51,19 @@ services:
       context: ../../
       dockerfile: ./docker/authentication/Dockerfile
     container_name: authentication
+    image: ecommerce/authentication
+    environment:
+      - AUTH_PORT=${AUTH_PORT}
+      - AUTH_MYSQL_ROOT_PASSWORD=${AUTH_MYSQL_ROOT_PASSWORD}
+      - AUTH_MYSQL_PORT=${AUTH_MYSQL_PORT}
+      - AUTH_MYSQL_HOST=${AUTH_MYSQL_HOST}
+      - LOKI_HOST=${LOKI_HOST}
+      - LOKI_PORT=${LOKI_PORT}
     networks:
       - ecommerce
     ports:
       - 8001:8001
-    command: [ "./app" ]
+    command: ["./app"]
     depends_on:
       - grafana
 
@@ -65,11 +73,12 @@ services:
       context: ../../
       dockerfile: ./docker/order/Dockerfile
     container_name: order
+    image: ecommerce/order
     networks:
       - ecommerce
     ports:
       - 8002:8002
-    command: [ "./app" ]
+    command: ["./app"]
     depends_on:
       - grafana
 
@@ -79,11 +88,12 @@ services:
       context: ../../
       dockerfile: ./docker/payment/Dockerfile
     container_name: payment
+    image: ecommerce/payment
     networks:
       - ecommerce
     ports:
       - 8003:8003
-    command: [ "./app" ]
+    command: ["./app"]
     depends_on:
       - grafana
 
@@ -93,11 +103,12 @@ services:
       context: ../../
       dockerfile: ./docker/product/Dockerfile
     container_name: product
+    image: ecommerce/product
     networks:
       - ecommerce
     ports:
       - 8004:8004
-    command: [ "./app" ]
+    command: ["./app"]
     depends_on:
       - grafana
 
@@ -108,6 +119,7 @@ services:
       context: ../../
       dockerfile: ./docker/frontend/admin-portal/Dockerfile
     container_name: admin-portal
+    image: ecommerce/admin-portal
     networks:
       - ecommerce
     ports:
@@ -119,6 +131,7 @@ services:
       context: ../../
       dockerfile: ./docker/frontend/seller-portal/Dockerfile
     container_name: seller-portal
+    image: ecommerce/seller-portal
     networks:
       - ecommerce
     ports:
@@ -130,6 +143,7 @@ services:
       context: ../../
       dockerfile: ./docker/frontend/website/Dockerfile
     container_name: website
+    image: ecommerce/website
     networks:
       - ecommerce
     ports:
@@ -168,7 +182,7 @@ services:
     networks:
       - ecommerce
     command:
-      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - "--config.file=/etc/prometheus/prometheus.yaml"
     ports:
       - 9090:9090
     restart: unless-stopped

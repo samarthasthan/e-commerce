@@ -4,23 +4,23 @@ global:
   evaluation_interval: 15s
 alerting:
   alertmanagers:
-  - static_configs:
-    - targets: []
-    scheme: http
-    timeout: 10s
-    api_version: v1
+    - static_configs:
+        - targets: []
+      scheme: http
+      timeout: 10s
+      api_version: v1
 scrape_configs:
-- job_name: prometheus
-  honor_timestamps: true
-  scrape_interval: 15s
-  scrape_timeout: 10s
-  metrics_path: /metrics
-  scheme: http
-  static_configs:
-  - targets:
-    # - prometheus:9090
-    - broker:8000
-    - authentication:8001
-    - order:8002
-    - payment:8003
-    - product:8004
+  - job_name: prometheus
+    honor_timestamps: true
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets:
+          - prometheus:9090
+          - broker:8000
+          - authentication:8001
+          - order:8002
+          - payment:8003
+          - product:8004
