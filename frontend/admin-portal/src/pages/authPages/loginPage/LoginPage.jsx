@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./loginPage.module.css";
-import AuthHeader from "../../../components/headers/authHeader/authHeader";
-import SimpleButton from "../../../components/buttons/simpleButton";
-import TextInput from "../../../components/inputs/textInput/textInput";
+import styles from "./LoginPage.module.css";
+import AuthHeader from "../../../components/headers/authHeader/AuthHeader";
+import SimpleButton from "../../../components/buttons/SimpleButton";
+import TextInput from "../../../components/inputs/textInput/TextInput";
 import { Link } from "react-router-dom";
 
 function LoginPage() {

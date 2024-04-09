@@ -1,16 +1,17 @@
 import "./App.css";
-import LoginPage from "./pages/authPages/loginPage/loginPage";
-import SignUpPage from "./pages/authPages/signUpPage/signUpPage";
+import LoginPage from "./pages/authPages/loginPage/LoginPage";
+import SignUpPage from "./pages/authPages/signUpPage/SignUpPage";
+
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
 } from "react-router-dom";
+import HomePage from "./pages/home/HomePage";
 
 const router = createBrowserRouter([
-  { path: "/", element: <LoginPage></LoginPage> },
+  { path: "/", element: <HomePage></HomePage> },
   { path: "/signup", element: <SignUpPage></SignUpPage> },
-  { path: "/login", element: <Navigate to={`/`}></Navigate> },
+  { path: "/login", element: <LoginPage></LoginPage> },
 ]);
 
 function App() {

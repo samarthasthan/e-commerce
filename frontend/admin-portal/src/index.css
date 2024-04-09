@@ -9,7 +9,14 @@ body {
   --white-color: white;
   --border-color: #e1e1e3;
   --border-focus-color: #bebebe;
+  --green-color: rgb(0, 177, 0);
   --grey-text: #8e8e8e;
+  --padding: 5px 10px 5px 10px;
+  --page-padding: 20px 30px 20px 30px;
+  --border-radius: 7px;
+  --border: 1px solid var(--border-color);
+  --h-gap: 10px;
+  --v-gap: 10px;
 }
 
 a {
@@ -24,4 +31,20 @@ a {
 .greyText {
   color: var(--grey-text);
   font-size: 15px;
+}
+
+.icon {
+  height: 25px;
+  width: 25px;
+}
+
+.round-border{
+  border: var(--border);
+  border-radius: var(--border-radius);
+}
+
+@media (max-width: 767px) {
+  body {
+    --page-padding: 10px 10px 10px 10px;
+  }
 }

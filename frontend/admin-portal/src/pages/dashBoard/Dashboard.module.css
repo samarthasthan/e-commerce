@@ -1,0 +1,66 @@
+.dashBoard {
+    padding: var(--page-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--h-gap);
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: var(--v-gap);
+}
+
+.columnChart {
+    width: 50%;
+}
+
+.stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--v-gap);
+    height: 400px;
+}
+
+.sales {
+    width: 50%;
+    padding: var(--page-padding);
+}
+
+.list{
+    overflow: scroll;
+    height: 90%;
+}
+
+.userItem {
+    display: flex;
+    padding-top: var(--h-gap);
+    padding-bottom: var(--h-gap);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userItemDetails {
+    gap: var(--v-gap);
+    display: flex;
+}
+
+@media (max-width: 767px) {
+    .cards{
+        overflow: scroll;
+        justify-content: flex-start;
+        
+    }
+    .stats{
+        flex-direction: column;
+    }
+    .sales {
+        width: auto;
+    }
+    .list{
+        height: 300px;
+        overflow: scroll;
+    }
+} 

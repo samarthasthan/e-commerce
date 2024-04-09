@@ -1,0 +1,20 @@
+.statsCard{
+    min-width: 20%;
+    padding: var(--page-padding);
+    border: var(--border);
+    border-radius: var(--border-radius);
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+@media (max-width: 767px) {
+    .statsCard{
+        min-width: 50%;
+        
+    }
+} 

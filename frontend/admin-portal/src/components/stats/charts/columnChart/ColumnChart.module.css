@@ -1,0 +1,15 @@
+.columnCharMobile{
+    display: none;
+}
+
+.columnChar{
+    display: block;
+}
+@media (max-width: 767px) {
+    .columnChar{
+        display: none;
+    }
+    .columnCharMobile{
+        display: block;
+    }
+} 

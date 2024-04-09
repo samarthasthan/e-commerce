@@ -1,4 +1,4 @@
-import styles from "./authHeader.module.css";
+import styles from "./AuthHeader.module.css";
 function AuthHeader() {
   return (
     <header className={styles.authHeader}>

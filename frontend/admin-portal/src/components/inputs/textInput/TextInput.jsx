@@ -1,4 +1,4 @@
-import styles from "./textInput.module.css";
+import styles from "./TextInput.module.css";
 function TextInput({ children, type }) {
   return (
     <input

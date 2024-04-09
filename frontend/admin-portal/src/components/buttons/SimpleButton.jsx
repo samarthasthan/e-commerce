@@ -1,4 +1,4 @@
-import styles from "./simpleButton.module.css";
+import styles from "./SimpleButton.module.css";
 function SimpleButton({
   children,
   backgroundColor = "var(--black-color)",
