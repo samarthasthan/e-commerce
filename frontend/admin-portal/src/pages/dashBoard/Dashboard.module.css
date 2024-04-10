@@ -12,26 +12,19 @@
     gap: var(--v-gap);
 }
 
-.columnChart {
-    width: 50%;
-}
-
 .stats {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: var(--v-gap);
-    height: 400px;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
 }
 
-.sales {
-    width: 50%;
+.recentSales {
     padding: var(--page-padding);
 }
 
-.list{
+.list {
     overflow: scroll;
-    height: 90%;
+    /* height: 25vmax; */
 }
 
 .userItem {
@@ -48,19 +41,13 @@
 }
 
 @media (max-width: 767px) {
-    .cards{
+    .cards {
         overflow: scroll;
         justify-content: flex-start;
-        
     }
-    .stats{
-        flex-direction: column;
+
+    .stats {
+        grid-template-columns: repeat(1, 1fr);
     }
-    .sales {
-        width: auto;
-    }
-    .list{
-        height: 300px;
-        overflow: scroll;
-    }
-} 
+
+}

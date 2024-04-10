@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -38,9 +39,14 @@ a {
   width: 25px;
 }
 
-.round-border{
+.round-border {
   border: var(--border);
   border-radius: var(--border-radius);
+}
+
+.round-border-heading {
+  position: relative;
+  padding: var(--page-padding);
 }
 
 @media (max-width: 767px) {
