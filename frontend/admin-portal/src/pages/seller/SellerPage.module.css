@@ -1,4 +1,33 @@
 .sellerPage {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+
     justify-content: space-evenly;
+}
+
+.list {
+    overflow: scroll;
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-gap);
+    height: calc(100vh - 85px);
+}
+
+.userItem {
+    display: flex;
+    padding-top: var(--h-gap);
+    padding-bottom: var(--h-gap);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userItemDetails {
+    gap: var(--v-gap);
+    display: flex;
+}
+
+.details {
+    height: 100%;
+
 }

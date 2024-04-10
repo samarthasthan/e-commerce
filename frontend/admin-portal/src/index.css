@@ -45,6 +45,7 @@ a {
 .round-border {
   border: var(--border);
   border-radius: var(--border-radius);
+  padding: var(--page-padding);
 }
 
 .round-border-heading {

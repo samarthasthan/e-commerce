@@ -1,0 +1,27 @@
+.subNavBar {
+    padding: var(--padding);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* background-color: var(--black-color);
+    color: var(--white-color); */
+}
+
+.details {
+    display: flex;
+    align-items: center;
+    gap: var(--v-gap);
+    /* background-color: var(--black-color);
+    color: var(--white-color); */
+}
+
+/* 
+p {
+    background-color: var(--black-color);
+    color: var(--white-color);
+}
+
+svg {
+    background-color: var(--black-color);
+    color: var(--white-color);
+} */

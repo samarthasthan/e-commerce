@@ -1,5 +1,9 @@
 .sellerSubHeader {
     /* height: 100%; */
-
     border-right: var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--v-gap);
+    padding: var(--padding);
+    position: relative;
 }

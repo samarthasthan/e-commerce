@@ -58,7 +58,8 @@ function Dashboard() {
               </div>
               <p>+${user.amount}.00</p>
             </div>)}
-          </div></div>
+          </div>
+        </div>
         <SimplePieChart className={`${styles.categorySales}`}></SimplePieChart>
         <AreaChart className={`${styles.totalUsers}`}></AreaChart>
       </div>
