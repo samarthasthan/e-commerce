@@ -2,6 +2,7 @@ import styles from "./MainHeader.module.css";
 import SimpleButton from "../../buttons/SimpleButton";
 import TextInput from "../../inputs/textInput/TextInput";
 import React from "react";
+import { NavLink } from "react-router-dom";
 function MainHeader() {
   return (
     <div className={styles.mainHeader}>
@@ -14,8 +15,12 @@ function MainHeader() {
         </SimpleButton>
 
         <ul className={styles.tabs}>
-          <li>Dashboard</li>
-          <li>Seller</li>
+          <NavLink className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          } to="/"><li>Dashboard</li></NavLink>
+          <NavLink className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          } to="/sellers"><li>Seller</li></NavLink>
           <li>Products</li>
           <li>Learn</li>
         </ul>

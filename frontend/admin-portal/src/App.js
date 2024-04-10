@@ -7,18 +7,27 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
+import SellerPage from "./pages/seller/SellerPage";
 
 const router = createBrowserRouter([
-  { path: "/", element: <HomePage></HomePage> },
+  {
+    path: "/", element: <HomePage></HomePage>, children: [
+      {
+        path: "/sellers",
+        element: <SellerPage></SellerPage>
+      }
+    ]
+  },
   { path: "/signup", element: <SignUpPage></SignUpPage> },
   { path: "/login", element: <LoginPage></LoginPage> },
 ]);
 
 function App() {
   return (
-    <div className="App">
-      <RouterProvider router={router}></RouterProvider>
-    </div>
+    <RouterProvider router={router}>
+      <div className="App"></div>
+    </RouterProvider>
+
   );
 }
 
