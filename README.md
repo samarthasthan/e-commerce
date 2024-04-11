@@ -61,22 +61,22 @@ For detailed setup instructions and additional information, please refer to the 
 | Admin Portal         | 3000  |
 | Vendor Portal        | 3001  |
 | Website              | 3002  |
-| Broker               | 6000  |
-| Broker-GraphQL       | 6000  |
-| Authentication       | 7000  |
-| Authentication-MySql | 7001  |
-| Authentication-Redis | 7002  |
-| Account              | 8000  |
-| Account-MongoDB      | 8001  |
-| Product              | 9000  |
-| Cart/Wishlist        | 10000 |
-| Notification         | 11000 |
-| Order                | 12000 |
-| Payment              | 13000 |
-| Grafana Dashboard    | 14000 |
-| Grafana Loki         | 14001 |
-| Prometheus           | 14002 |
-| Jaeger               | 14003 |
+| Broker               | 7000  |
+| Broker-GraphQL       | 7000  |
+| Authentication       | 8000  |
+| Authentication-MySql | 8001  |
+| Authentication-Redis | 8002  |
+| Account              | 9000  |
+| Account-MongoDB      | 9001  |
+| Product              | 10000  |
+| Cart/Wishlist        | 11000 |
+| Notification         | 12000 |
+| Order                | 13000 |
+| Payment              | 14000 |
+| Grafana Dashboard    | 15000 |
+| Grafana Loki         | 15001 |
+| Prometheus           | 15002 |
+| Jaeger               | 15003 |
 
 ## Contribution Guidelines
 
