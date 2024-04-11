@@ -54,6 +54,30 @@ To get started with the project, follow these steps:
 
 For detailed setup instructions and additional information, please refer to the documentation in the `docs` directory.
 
+## Port Configuration
+
+| Name                 | Port  |
+| -------------------- | ----- |
+| Admin Portal         | 3000  |
+| Vendor Portal        | 3001  |
+| Website              | 3002  |
+| Broker               | 6000  |
+| Broker-GraphQL       | 6000  |
+| Authentication       | 7000  |
+| Authentication-MySql | 7001  |
+| Authentication-Redis | 7002  |
+| Account              | 8000  |
+| Account-MongoDB      | 8001  |
+| Product              | 9000  |
+| Cart/Wishlist        | 10000 |
+| Notification         | 11000 |
+| Order                | 12000 |
+| Payment              | 13000 |
+| Grafana Dashboard    | 14000 |
+| Grafana Loki         | 14001 |
+| Prometheus           | 14002 |
+| Jaeger               | 14003 |
+
 ## Contribution Guidelines
 
 Contributions to the project are encouraged! Whether you're interested in adding new features, fixing bugs, or improving documentation, please feel free to submit pull requests. Make sure to follow the contribution guidelines outlined in `CONTRIBUTING.md`.
