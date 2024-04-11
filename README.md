@@ -1,12 +1,33 @@
-# Multi-Vendor E-Commerce Platform
+# Multi-Vendor E-commerce Platform
 
 Welcome to the Multi-Vendor E-Commerce Platform project! This project aims to create a scalable, feature-rich e-commerce platform similar to Amazon and Flipkart. It includes an admin portal for managing the platform, a vendor portal for sellers, and a public website for customers.
+
+## Technologies Used
+
+<p align="left">
+<img src="./others/logos/go.png" alt="go" width="100" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/reactjs.png" alt="reactjs" width="45" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/Next.js logo.svg" alt="nextjs" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/grpc.png" alt="grpc" width="60" height="50" style="margin-right: 10px"/>
+<img src="./others/logos/graphql.png" alt="graphql" width="50" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/rest-api.webp" alt="rest-api" width="50" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/docker.png" alt="docker" width="70" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/kubernetes.png" alt="kubernetes" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/mysql.png" alt="mysql" width="100" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/mongodb.png" alt="mongodb" width="150" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/redis.png" alt="redis" width="120" height="40" style="margin-right: 10px"/>
+<img src="./others/logos//grafana.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/loki.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/prometheus.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/jaeger.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
+<img src="./others/logos/elastic-search.png" alt="rest-api" width="40" height="40" style="margin-right: 10px"/>
+</p>
 
 ## Project Overview
 
 ### High Level Design
 
-![App Screenshot](./others/designs/multi-vendor-e-commerce.png)
+![Multi Vendor E-commerce](./others/designs/multi-vendor-e-commerce.png)
 
 This project is built using various technologies to ensure efficiency, scalability, and maintainability. Here's an overview of the key components:
 
