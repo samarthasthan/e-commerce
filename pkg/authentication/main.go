@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import "github.com/samarthasthan/e-commerce/internal/authentication"
 
 func main() {
-	fmt.Println("Hello world from authentication!")
+	// Authentication gRPC server
+	as := authentication.NewAuthServer()
+	as.Connect()
 }
