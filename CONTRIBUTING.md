@@ -10,7 +10,7 @@ To contribute to the project, please follow these guidelines:
 2. Clone the forked repository to your local machine:
 
    ```bash
-   git clone https://github.com/samarthasthan/e-commerce.git
+   git clone https://github.com/samarthasthan/multi-vendor-e-commerce.git
    ```
 
 3. Create a new branch for your contribution:
