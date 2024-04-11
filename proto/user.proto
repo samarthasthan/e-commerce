@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = "github.com/samarthasthan/e-commerce";
+
+message User{
+    string UUID = 1;
+    string email = 2;
+    string password = 3;
+}
