@@ -2,6 +2,10 @@
 
 Welcome to the Multi-Vendor E-Commerce Platform project! This project aims to create a scalable, feature-rich e-commerce platform similar to Amazon and Flipkart. It includes an admin portal for managing the platform, a vendor portal for sellers, and a public website for customers.
 
+### Project Status
+
+This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
+
 ## Technologies Used
 
 <p align="left">
@@ -38,10 +42,6 @@ This project is built using various technologies to ensure efficiency, scalabili
 - **Containerization**: Docker is used for containerization, enabling easy deployment and scaling of microservices across different environments.
 - **Monitoring and Logging**: Grafana, Loki, Prometheus, and Jaeger are integrated for monitoring, logging, and tracing, ensuring the system's health and performance can be easily monitored and analyzed.
 - **Databases**: The project employs MySQL, MongoDB, and Redis for efficient data storage, retrieval, and caching.
-
-## Project Status
-
-This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
 
 ## Getting Started
 
