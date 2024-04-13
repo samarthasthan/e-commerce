@@ -67,50 +67,50 @@ services:
     depends_on:
       - grafana
 
-  #Order
-  order:
-    build:
-      context: ../../
-      dockerfile: ./docker/order/Dockerfile
-    container_name: order
-    image: ecommerce/order
-    networks:
-      - ecommerce
-    ports:
-      - 8002:8002
-    command: ["./app"]
-    depends_on:
-      - grafana
+  # #Order
+  # order:
+  #   build:
+  #     context: ../../
+  #     dockerfile: ./docker/order/Dockerfile
+  #   container_name: order
+  #   image: ecommerce/order
+  #   networks:
+  #     - ecommerce
+  #   ports:
+  #     - 8002:8002
+  #   command: ["./app"]
+  #   depends_on:
+  #     - grafana
 
-  #Payment
-  payment:
-    build:
-      context: ../../
-      dockerfile: ./docker/payment/Dockerfile
-    container_name: payment
-    image: ecommerce/payment
-    networks:
-      - ecommerce
-    ports:
-      - 8003:8003
-    command: ["./app"]
-    depends_on:
-      - grafana
+  # #Payment
+  # payment:
+  #   build:
+  #     context: ../../
+  #     dockerfile: ./docker/payment/Dockerfile
+  #   container_name: payment
+  #   image: ecommerce/payment
+  #   networks:
+  #     - ecommerce
+  #   ports:
+  #     - 8003:8003
+  #   command: ["./app"]
+  #   depends_on:
+  #     - grafana
 
-  #Product
-  product:
-    build:
-      context: ../../
-      dockerfile: ./docker/product/Dockerfile
-    container_name: product
-    image: ecommerce/product
-    networks:
-      - ecommerce
-    ports:
-      - 8004:8004
-    command: ["./app"]
-    depends_on:
-      - grafana
+  # #Product
+  # product:
+  #   build:
+  #     context: ../../
+  #     dockerfile: ./docker/product/Dockerfile
+  #   container_name: product
+  #   image: ecommerce/product
+  #   networks:
+  #     - ecommerce
+  #   ports:
+  #     - 8004:8004
+  #   command: ["./app"]
+  #   depends_on:
+  #     - grafana
 
   #Frontend
   #Admin portal

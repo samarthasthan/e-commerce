@@ -29,8 +29,7 @@ func (a *AuthServer) Connect() {
 	proto_go.RegisterAuthenticationServiceServer(s, &AuthServer{})
 
 	log.Printf("Authentication gRPC listing at %v", lis.Addr())
-	err = s.Serve(lis)
-	if err != nil {
+	if err = s.Serve(lis); err != nil {
 		panic(err)
 	}
 }

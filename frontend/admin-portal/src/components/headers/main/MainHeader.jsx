@@ -15,12 +15,22 @@ function MainHeader() {
         </SimpleButton>
 
         <ul className={styles.tabs}>
-          <NavLink className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "active" : ""
-          } to="/"><li>Dashboard</li></NavLink>
-          <NavLink className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "active" : ""
-          } to="/sellers"><li>Seller</li></NavLink>
+          <NavLink
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "active" : ""
+            }
+            to="/"
+          >
+            <li>Dashboard</li>
+          </NavLink>
+          <NavLink
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "active" : ""
+            }
+            to="/sellers"
+          >
+            <li>Seller</li>
+          </NavLink>
           <li>Products</li>
           <li>Learn</li>
         </ul>
