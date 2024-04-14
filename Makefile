@@ -14,12 +14,12 @@ build:
 	@rm -rf frontend/admin-portal/node_modules frontend/admin-portal/build frontend/seller-portal/node_modules frontend/seller-portal/.next frontend/website/node_modules frontend/website/.next
 	@docker-compose -f builds/package/compose.yaml build
 
-gen:
+grpc-gen:
 	@echo "Generating Go code from Protocol Buffers..."
 	@protoc --go_out=paths=source_relative:proto_go --go-grpc_out=paths=source_relative:proto_go --proto_path=proto proto/*.proto
 	@echo "Go code generation completed."
 
-clean:
+grpc-clean:
 	@echo "Cleaning generated Go code..."
 	@rm -f proto_go/*.go
 	@echo "Clean completed."
