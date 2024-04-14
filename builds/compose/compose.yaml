@@ -7,20 +7,9 @@ services:
     networks:
       - ecommerce
     ports:
-      - 1248:3306
+      - "${AUTHENTICATION_MYSQL_PORT}:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${AUTH_MYSQL_ROOT_PASSWORD}
-
-  auth-mongodb:
-    image: mongo:7.0.7
-    container_name: auth-mongodb
-    networks:
-      - ecommerce
-    ports:
-      - "${AUTH_MONGO_PORT}:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME= ${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD= ${MONGO_INITDB_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
 
   auth-redis:
     image: redis:7.2.4-alpine
@@ -28,19 +17,24 @@ services:
     networks:
       - ecommerce
     ports:
-      - "${AUTH_REDIS_PORT}:6379"
+      - "${AUTHENTICATION_REDIS_PORT}:6379"
 
+  #Services
   #Broker
   broker:
     build:
       context: ../../
-      dockerfile: ./docker/broker/Dockerfile
+      dockerfile: ./builds/docker/broker/Dockerfile
     container_name: broker
     image: ecommerce/broker
     networks:
       - ecommerce
+    environment:
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
     ports:
-      - 8000:8000
+      - "${BROKER_REST_PORT}:${BROKER_REST_PORT}"
+      - "${BROKER_GRAPHQL_PORT}:${BROKER_GRAPHQL_PORT}"
     command: ["./app"]
     depends_on:
       - grafana
@@ -49,105 +43,61 @@ services:
   authentication:
     build:
       context: ../../
-      dockerfile: ./docker/authentication/Dockerfile
+      dockerfile: ./builds/docker/authentication/Dockerfile
     container_name: authentication
     image: ecommerce/authentication
     environment:
-      - AUTH_PORT=${AUTH_PORT}
-      - AUTH_MYSQL_ROOT_PASSWORD=${AUTH_MYSQL_ROOT_PASSWORD}
-      - AUTH_MYSQL_PORT=${AUTH_MYSQL_PORT}
-      - AUTH_MYSQL_HOST=${AUTH_MYSQL_HOST}
-      - LOKI_HOST=${LOKI_HOST}
-      - LOKI_PORT=${LOKI_PORT}
+      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
+      - AUTHENTICATION_MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
+      - AUTHENTICATION_MYSQL_PORT=${AUTHENTICATION_MYSQL_PORT}
+      - AUTHENTICATION_MYSQL_HOST=${AUTHENTICATION_MYSQL_HOST}
+      - AUTHENTICATION_REDIS_PORT=${AUTHENTICATION_REDIS_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
     networks:
       - ecommerce
     ports:
-      - 8001:8001
+      - "${AUTHENTICATION_GRPC_PORT}:${AUTHENTICATION_GRPC_PORT}"
     command: ["./app"]
     depends_on:
       - grafana
-
-  # #Order
-  # order:
-  #   build:
-  #     context: ../../
-  #     dockerfile: ./docker/order/Dockerfile
-  #   container_name: order
-  #   image: ecommerce/order
-  #   networks:
-  #     - ecommerce
-  #   ports:
-  #     - 8002:8002
-  #   command: ["./app"]
-  #   depends_on:
-  #     - grafana
-
-  # #Payment
-  # payment:
-  #   build:
-  #     context: ../../
-  #     dockerfile: ./docker/payment/Dockerfile
-  #   container_name: payment
-  #   image: ecommerce/payment
-  #   networks:
-  #     - ecommerce
-  #   ports:
-  #     - 8003:8003
-  #   command: ["./app"]
-  #   depends_on:
-  #     - grafana
-
-  # #Product
-  # product:
-  #   build:
-  #     context: ../../
-  #     dockerfile: ./docker/product/Dockerfile
-  #   container_name: product
-  #   image: ecommerce/product
-  #   networks:
-  #     - ecommerce
-  #   ports:
-  #     - 8004:8004
-  #   command: ["./app"]
-  #   depends_on:
-  #     - grafana
 
   #Frontend
   #Admin portal
   admin-portal:
     build:
       context: ../../
-      dockerfile: ./docker/frontend/admin-portal/Dockerfile
+      dockerfile: ./builds/docker/frontend/admin-portal/Dockerfile
     container_name: admin-portal
     image: ecommerce/admin-portal
     networks:
       - ecommerce
     ports:
-      - "3000:3000"
+      - "${ADMIN_PORTAL_PORT}:3000"
 
   #Seller portal
   seller-portal:
     build:
       context: ../../
-      dockerfile: ./docker/frontend/seller-portal/Dockerfile
+      dockerfile: ./builds/docker/frontend/seller-portal/Dockerfile
     container_name: seller-portal
     image: ecommerce/seller-portal
     networks:
       - ecommerce
     ports:
-      - "3001:3000"
+      - "${VENDOR_PORTAL_PORT}:3000"
 
   #Website
   website:
     build:
       context: ../../
-      dockerfile: ./docker/frontend/website/Dockerfile
+      dockerfile: ./builds/docker/frontend/website/Dockerfile
     container_name: website
     image: ecommerce/website
     networks:
       - ecommerce
     ports:
-      - "3002:3000"
+      - "${WEBSITE_PORT}:3000"
 
   # Metrics, Logging and Tracing
   loki:
@@ -156,7 +106,7 @@ services:
     networks:
       - ecommerce
     ports:
-      - "3100:3100"
+      - "${GRAFANA_LOKI_PORT}:3100"
 
   grafana:
     image: grafana/grafana-oss
@@ -164,7 +114,7 @@ services:
     networks:
       - ecommerce
     ports:
-      - "3200:3000"
+      - "${GRAFANA_PORT}:3000"
     depends_on:
       - loki
     environment:
@@ -184,7 +134,7 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
     ports:
-      - 9090:9090
+      - ${PROMETHEUS_PORT}:9090
     restart: unless-stopped
     volumes:
       - ../../config/prometheus:/etc/prometheus

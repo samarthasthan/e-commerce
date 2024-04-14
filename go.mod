@@ -9,6 +9,10 @@ require (
 )
 
 require (
+	github.com/afiskon/promtail-client v0.0.0-20190305142237-506f3f921e9c // indirect
+	github.com/akkuman/logrus-loki-hook v0.0.0-20210518091319-f99fe13c48f5 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
