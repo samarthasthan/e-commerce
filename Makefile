@@ -23,3 +23,5 @@ clean:
 	@echo "Cleaning generated Go code..."
 	@rm -f proto_go/*.go
 	@echo "Clean completed."
+
+
