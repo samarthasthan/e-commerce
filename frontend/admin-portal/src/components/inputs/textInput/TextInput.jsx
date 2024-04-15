@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./TextInput.module.css";
 function TextInput({ children, type }) {
   return (

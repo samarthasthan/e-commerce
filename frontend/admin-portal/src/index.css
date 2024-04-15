@@ -25,11 +25,9 @@ a {
   text-decoration: none;
 }
 
-
 * {
   margin: 0px;
   padding: 0px;
-  background-color: var(--white-color);
 }
 
 .greyText {
@@ -64,7 +62,6 @@ a:active {
 .active {
   font-weight: bold;
 }
-
 
 @media (max-width: 767px) {
   body {

@@ -25,7 +25,12 @@ function SignUpPage() {
           <p className="greyText">
             Enter your email below to create your account
           </p>
+          <div className={`${styles.names}`}>
+            <TextInput type="text">First Name</TextInput>
+            <TextInput type="text">Last Name</TextInput>
+          </div>
           <TextInput type="email">name@example.com</TextInput>
+          <TextInput type="tel">+91 1234567890</TextInput>
           <TextInput type="password">password123</TextInput>
           <SimpleButton
             backgroundColor="var(--black-color)"
