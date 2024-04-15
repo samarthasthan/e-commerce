@@ -2,15 +2,20 @@ package logger
 
 import (
 	"fmt"
+	"log"
 
 	lokihook "github.com/akkuman/logrus-loki-hook"
 	"github.com/samarthasthan/e-commerce/pkg/env"
 	"github.com/sirupsen/logrus"
 )
 
+func init() {
+	log.Println("Logger util initialised")
+}
+
 var (
 	LOKI_HOST = env.GetEnv("GRAFANA_LOKI_HOST", "localhost")
-	LOKI_PORT = env.GetEnv("GRAFANA_LOKI_PORT", "3100")
+	LOKI_PORT = env.GetEnv("GRAFANA_LOKI_PORT", "15001")
 )
 
 type Logger struct {
@@ -24,7 +29,6 @@ func NewLogger(appName string) *Logger {
 		Labels: map[string]string{
 			"application": appName,
 		},
-		BatchEntriesNumber: 1,
 	}
 	hook, err := lokihook.NewHook(lokiHookConfig)
 	if err != nil {
