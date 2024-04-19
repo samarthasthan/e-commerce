@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/samarthasthan/e-commerce";
+option go_package = "github.com/samarthasthan/e-commerce/proto_go";
 
 message SignUpRequest {
   // Request message for the SignUp service

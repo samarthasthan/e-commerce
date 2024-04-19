@@ -1,13 +1,24 @@
-package broker
+package rest
 
 import (
 	"encoding/json"
 	"net/http"
 
-	proto_go "github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/internal/broker/delivery/grpc"
+	"github.com/samarthasthan/e-commerce/pkg/logger"
+	"github.com/samarthasthan/e-commerce/proto_go"
 )
 
-func SignUp(w http.ResponseWriter, r *http.Request) {
+type Handler struct {
+	log        *logger.Logger
+	grpcClient *grpc.GRPCClients
+}
+
+func NewHandler(log *logger.Logger, grpcClient *grpc.GRPCClients) *Handler {
+	return &Handler{log: log, grpcClient: grpcClient}
+}
+
+func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var user proto_go.SignUpRequest
 
@@ -17,7 +28,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logrs.Info(&user)
+	h.log.Info(&user)
 
 	validationErrors := make(map[string]string)
 

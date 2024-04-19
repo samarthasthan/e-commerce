@@ -4,7 +4,7 @@
 // - protoc             v3.6.1
 // source: authentication.proto
 
-package e_commerce
+package proto_go
 
 import (
 	context "context"

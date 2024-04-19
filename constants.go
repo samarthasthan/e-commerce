@@ -2,5 +2,5 @@ package constants
 
 const (
 	BROKER_LOGGER_NAME         = "Broker"
-	BROKER_AUTHENTICATION_NAME = "Authentication"
+	AUTHENTICATION_LOGGER_NAME = "Authentication"
 )

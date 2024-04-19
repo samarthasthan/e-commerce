@@ -25,3 +25,8 @@ grpc-clean:
 	@echo "Clean completed."
 
 
+run-authentication:
+	@go run cmd/authentication/main.go
+
+run-broker:
+	@go run cmd/broker/main.go
