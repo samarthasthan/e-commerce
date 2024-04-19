@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -27,9 +28,6 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
-
-	h.log.Info(&user)
-
 	validationErrors := make(map[string]string)
 
 	if len(user.FirstName) < 5 {
@@ -56,5 +54,12 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(&user)
+	res, err := h.grpcClient.AuthenticationClient.SignUp(context.Background(), &user)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(&res)
 }

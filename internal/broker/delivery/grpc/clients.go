@@ -49,7 +49,6 @@ func (c *GRPCClients) ConnectToAuthenticationService() error {
 		c.log.Error("Failed to connect to Authentication Service: ", err)
 		return err
 	}
-	defer conn.Close()
 
 	c.AuthenticationClient = proto_go.NewAuthenticationServiceClient(conn)
 	c.conns["authentication"] = conn
