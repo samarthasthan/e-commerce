@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
-
-	constants "github.com/samarthasthan/e-commerce"
-	"github.com/samarthasthan/e-commerce/pkg/logger"
 )
 
 var (
-	logrs = logger.NewLogger(constants.BROKER_LOGGER_NAME)
-	wg    sync.WaitGroup
+	wg sync.WaitGroup
 )
 
 type RestServer struct {
