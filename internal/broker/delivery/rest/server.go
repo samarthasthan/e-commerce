@@ -49,5 +49,5 @@ func (r *RestServer) HandleRoutes() {
 	r.ServeMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello welcome to broker"))
 	})
-	r.ServeMux.HandleFunc("POST /signup", r.handler.SignUp)
+	r.ServeMux.Handle("POST /signup", LoggingMiddleware(r.log, http.HandlerFunc(r.handler.SignUp)))
 }
