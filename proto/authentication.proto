@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/samarthasthan/e-commerce";
+
+message SignUpRequest {
+  // Request message for the SignUp service
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  string phone_no = 4;
+  string password = 5;
+}
+
+message SignUpResponse {
+  // Response message for the SignUp service
+  bool success = 1;
+  string message = 2;
+}
+
+service AuthenticationService {
+  // Service definition for authentication
+  rpc SignUp(SignUpRequest) returns (SignUpResponse);
+}

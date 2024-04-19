@@ -9,7 +9,6 @@ CREATE TABLE Roles(
 
 CREATE TABLE Users(
     UserID varchar(255) PRIMARY KEY,
-    UserName varchar(255) NOT NULL,
     FirstName varchar(255) NOT NULL,
     LastName varchar(255) NOT NULL,
     Email varchar(255) NOT NULL,
