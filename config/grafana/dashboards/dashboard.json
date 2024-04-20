@@ -76,7 +76,7 @@
               }
             ]
           },
-          "unit": "dtdurationms"
+          "unit": "µs"
         },
         "overrides": []
       },
@@ -106,7 +106,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "http_request_duration_seconds_sum/http_request_duration_seconds_count",
           "fullMetaSearch": false,
           "includeNullMetadata": true,

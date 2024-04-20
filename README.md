@@ -6,6 +6,18 @@ Welcome to the Multi-Vendor E-Commerce Platform project! This project aims to cr
 
 This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
 
+### Current State of the Project
+
+Here's an overview of the tasks I'm currently working on and the next steps:
+
+- **Authentication**: Implementing the authentication service logic and connecting it to the broker or API Gateway service.
+- **Frontend Development**: Creating the admin portal dashboard.
+- **Logging and Monitoring**: Set up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
+
+### Logging and Monitoring Screenshot
+
+![Logging and Monitoring Screenshot](./others/images/Screenshot%202024-04-20%20at%206.29.09%20PM.png)
+
 ## Technologies Used
 
 <p align="left">
@@ -13,6 +25,7 @@ This project is currently in its early stages and is being developed by a solo d
 <img src="./others/logos/reactjs.png" alt="reactjs" width="45" height="40" style="margin-right: 10px"/>
 <img src="./others/logos/Next.js logo.svg" alt="nextjs" width="40" height="40" style="margin-right: 10px"/>
 <img src="./others/logos/grpc.png" alt="grpc" width="60" height="50" style="margin-right: 10px"/>
+<img src="./others/logos/kafka.png" alt="kafka" width="120" height="50" style="margin-right: 10px"/>
 <img src="./others/logos/graphql.png" alt="graphql" width="50" height="40" style="margin-right: 10px"/>
 <img src="./others/logos/rest-api.webp" alt="rest-api" width="50" height="40" style="margin-right: 10px"/>
 <img src="./others/logos/docker.png" alt="docker" width="70" height="40" style="margin-right: 10px"/>
@@ -68,7 +81,7 @@ For detailed setup instructions and additional information, please refer to the 
 | Authentication-Redis | 8002  |
 | Account              | 9000  |
 | Account-MongoDB      | 9001  |
-| Product              | 10000  |
+| Product              | 10000 |
 | Cart/Wishlist        | 11000 |
 | Notification         | 12000 |
 | Order                | 13000 |
