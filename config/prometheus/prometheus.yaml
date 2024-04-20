@@ -19,8 +19,4 @@ scrape_configs:
     static_configs:
       - targets:
           - prometheus:9090
-          # - broker:8000
-          # - authentication:8001
-          # - order:8002
-          # - payment:8003
-          # - product:8004
+          - 172.235.16.92:7000
