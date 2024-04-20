@@ -39,7 +39,9 @@ func (g *AuthenticationGrpcServer) Run() {
 
 	s := grpc.NewServer()
 
-	proto_go.RegisterAuthenticationServiceServer(s, &AuthenticationServer{})
+	as := NewAuthenticationServer()
+
+	proto_go.RegisterAuthenticationServiceServer(s, as)
 	g.log.WithFields(
 		logrus.Fields{
 			"Listening on PORT: ": lis.Addr(),

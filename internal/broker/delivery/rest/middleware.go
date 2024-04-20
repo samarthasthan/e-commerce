@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samarthasthan/e-commerce/pkg/logger"
+	"github.com/sirupsen/logrus"
 )
 
 // LoggingMiddleware logs details of incoming HTTP requests and responses.
@@ -22,7 +23,6 @@ func LoggingMiddleware(log *logger.Logger, next http.Handler) http.Handler {
 		duration := time.Since(startTime)
 
 		// Log response details
-		log.Infof("Completed request: method=%s, url=%s, status=%d, duration=%s",
-			r.Method, r.URL, w.WriteHeader, duration)
+		log.Logger.Logf(logrus.InfoLevel, "Completed request: method=%s, url=%s, status=%d, duration=%s", []interface{}{r.Method, r.URL, w.WriteHeader, duration}...)
 	})
 }
