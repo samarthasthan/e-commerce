@@ -2,22 +2,6 @@
 
 Welcome to the Multi-Vendor E-Commerce Platform project! This project aims to create a scalable, feature-rich e-commerce platform similar to Amazon and Flipkart. It includes an admin portal for managing the platform, a vendor portal for sellers, and a public website for customers.
 
-### Project Status
-
-This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
-
-### Current State of the Project
-
-Here's an overview of the tasks I'm currently working on and the next steps:
-
-- **Authentication**: Implementing the authentication service logic and connecting it to the broker or API Gateway service.
-- **Frontend Development**: Creating the admin portal dashboard.
-- **Logging and Monitoring**: Set up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
-
-### Logging and Monitoring Screenshot
-
-![Logging and Monitoring Screenshot](./others/images/Screenshot%202024-04-20%20at%206.29.09%20PM.png)
-
 ## Technologies Used
 
 <p align="left">
@@ -40,6 +24,18 @@ Here's an overview of the tasks I'm currently working on and the next steps:
 <img src="./others/logos/elastic-search.png" alt="rest-api" width="40" height="40" style="margin-right: 10px"/>
 </p>
 
+### Project Status
+
+This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
+
+### Current State of the Project
+
+Here's an overview of the tasks I'm currently working on and the next steps:
+
+- **Authentication**: Implementing the authentication service logic and connecting it to the broker or API Gateway service.
+- **Frontend Development**: Creating the admin portal dashboard.
+- **Logging and Monitoring**: Set up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
+
 ## Project Overview
 
 ### High Level Design
@@ -55,6 +51,10 @@ This project is built using various technologies to ensure efficiency, scalabili
 - **Containerization**: Docker is used for containerization, enabling easy deployment and scaling of microservices across different environments.
 - **Monitoring and Logging**: Grafana, Loki, Prometheus, and Jaeger are integrated for monitoring, logging, and tracing, ensuring the system's health and performance can be easily monitored and analyzed.
 - **Databases**: The project employs MySQL, MongoDB, and Redis for efficient data storage, retrieval, and caching.
+
+### Monitoring and Logging Screenshot
+
+![Logging and Monitoring Screenshot](./others/images/Screenshot%202024-04-20%20at%206.29.09%20PM.png)
 
 ## Getting Started
 
