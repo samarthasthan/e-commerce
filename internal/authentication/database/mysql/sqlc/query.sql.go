@@ -20,7 +20,7 @@ type CreateAccountParams struct {
 	Firstname string
 	Lastname  string
 	Email     string
-	Phoneno   sql.NullString
+	Phoneno   string
 	Password  string
 	Role      sql.NullString
 }
@@ -35,4 +35,28 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (s
 		arg.Password,
 		arg.Role,
 	)
+}
+
+const getPassword = `-- name: GetPassword :one
+SELECT Password from Users
+WHERE Email = ?
+`
+
+func (q *Queries) GetPassword(ctx context.Context, email string) (string, error) {
+	row := q.db.QueryRowContext(ctx, getPassword, email)
+	var password string
+	err := row.Scan(&password)
+	return password, err
+}
+
+const getRole = `-- name: GetRole :one
+SELECT RoleID from Roles
+WHERE RoleName = ?
+`
+
+func (q *Queries) GetRole(ctx context.Context, rolename string) (string, error) {
+	row := q.db.QueryRowContext(ctx, getRole, rolename)
+	var roleid string
+	err := row.Scan(&roleid)
+	return roleid, err
 }

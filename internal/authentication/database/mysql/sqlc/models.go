@@ -35,7 +35,7 @@ type User struct {
 	Lastname   string
 	Email      string
 	Isverified sql.NullBool
-	Phoneno    sql.NullString
+	Phoneno    string
 	Password   string
 	Role       sql.NullString
 	Blocked    sql.NullBool

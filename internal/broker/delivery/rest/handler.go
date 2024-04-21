@@ -28,28 +28,31 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
-	validationErrors := make(map[string]string)
+	errors := make(map[string]string)
 
 	if len(user.FirstName) < 5 {
-		validationErrors["FirstName"] = "First name should be at least 5 characters"
+		errors["FirstName"] = "First name should be at least 5 characters"
 	}
 	if len(user.LastName) < 5 {
-		validationErrors["LastName"] = "Last name should be at least 5 characters"
+		errors["LastName"] = "Last name should be at least 5 characters"
 	}
 	if len(user.Email) == 0 {
-		validationErrors["Email"] = "Email is required"
+		errors["Email"] = "Email is required"
 	}
 	if len(user.PhoneNo) < 10 {
-		validationErrors["PhoneNo"] = "Phone number should be at least 10 characters"
+		errors["PhoneNo"] = "Phone number should be at least 10 characters"
 	}
 	if len(user.Password) < 8 {
-		validationErrors["Password"] = "Password should be at least 8 characters"
+		errors["Password"] = "Password should be at least 8 characters"
+	}
+	if len(user.Role) < 4 {
+		errors["Role"] = "Please use a valid role"
 	}
 
-	if len(validationErrors) > 0 {
+	if len(errors) > 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"errors": validationErrors,
+			"errors": errors,
 		})
 		return
 	}
@@ -57,7 +60,9 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	res, err := h.grpcClient.AuthenticationClient.SignUp(context.Background(), &user)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		errors["Error"] = err.Error()
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(errors)
 		return
 	}
 

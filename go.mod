@@ -17,6 +17,7 @@ require (
 	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
+	golang.org/x/crypto v0.22.0 // indirect
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240227224415-6ceb2ff114de // indirect
@@ -28,5 +29,5 @@ require (
 	github.com/akkuman/logrus-loki-hook v0.0.0-20210518091319-f99fe13c48f5
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/sirupsen/logrus v1.9.3
-	golang.org/x/sys v0.17.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 )

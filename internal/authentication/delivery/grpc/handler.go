@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database/mysql/sqlc"
+	bcrpyt "github.com/samarthasthan/e-commerce/pkg/bcrpyt"
 	"github.com/samarthasthan/e-commerce/proto_go"
 )
 
@@ -28,16 +29,29 @@ func NewAuthenticationHandler(db *database.Database) *AuthenticationHandler {
 // SignUp handles the SignUp gRPC request
 func (c *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpRequest) (*proto_go.SignUpResponse, error) {
 
+	role, err := c.db.Queries.GetRole(ctx, in.Role)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// generate hashed password
+	pass, err := bcrpyt.HashPassword(in.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
 	uuid := uuid.New()
 	// Execute CreateAccount query using sqlc
-	_, err := c.db.Queries.CreateAccount(ctx, sqlc.CreateAccountParams{
+	_, err = c.db.Queries.CreateAccount(ctx, sqlc.CreateAccountParams{
 		Userid:    uuid.String(),
 		Firstname: in.FirstName,
 		Lastname:  in.LastName,
 		Email:     in.Email,
-		Phoneno:   sql.NullString{String: in.PhoneNo, Valid: true},
-		Password:  in.Password,
-		Role:      sql.NullString{String: "83064af3-bb81-4514-a6d4-afba340825cd", Valid: true},
+		Phoneno:   in.PhoneNo,
+		Password:  pass,
+		Role:      sql.NullString{String: role, Valid: true},
 	})
 
 	// Handle any errors that occurred during the CreateAccount query

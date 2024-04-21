@@ -1,48 +1,68 @@
 CREATE TABLE Roles(
-    RoleID varchar(255) PRIMARY KEY,
-    RoleName varchar(255) NOT NULL,
-    RoleDesc varchar(255),
-    CreatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    UpdatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    DeleteAt timestamp
+    RoleID CHAR(36) PRIMARY KEY,
+    RoleName VARCHAR(255) NOT NULL UNIQUE,
+    RoleDesc VARCHAR(255),
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL
 );
 
 CREATE TABLE Users(
-    UserID varchar(255) PRIMARY KEY,
-    FirstName varchar(255) NOT NULL,
-    LastName varchar(255) NOT NULL,
-    Email varchar(255) NOT NULL,
-    IsVerified boolean DEFAULT FALSE,
-    PhoneNo varchar(255),
-    Password varchar(255) NOT NULL,
-    Role varchar(255),
-    Blocked boolean DEFAULT FALSE,
-    CreatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    UpdatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    DeleteAt timestamp,
+    UserID CHAR(36) PRIMARY KEY,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    IsVerified BOOLEAN DEFAULT FALSE,
+    PhoneNo VARCHAR(255) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    Role CHAR(36) NOT NULL,
+    Blocked BOOLEAN DEFAULT FALSE,
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL,
     FOREIGN KEY (Role) REFERENCES Roles(RoleID)
 );
 
 CREATE TABLE Resets(
-    ResetID varchar(255) PRIMARY KEY,
-    User varchar(255),
-    ResetToken varchar(255) NOT NULL,
-    ExpiresAt timestamp NOT NULL,
-    IsUsed boolean DEFAULT FALSE,
-    CreatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    UpdatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    DeleteAt timestamp,
+    ResetID CHAR(36) PRIMARY KEY,
+    User CHAR(36),
+    ResetToken VARCHAR(255) NOT NULL,
+    ExpiresAt TIMESTAMP NOT NULL,
+    IsUsed BOOLEAN DEFAULT FALSE,
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL,
     FOREIGN KEY (User) REFERENCES Users(UserID)
 );
 
 CREATE TABLE Verifications(
-    VerificationId varchar(255) PRIMARY KEY,
-    User varchar(255),
-    VerifyToken varchar(255) NOT NULL,
-    ExpiresAt timestamp NOT NULL,
-    IsUsed boolean DEFAULT FALSE,
-    CreatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    UpdatedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-    DeleteAt timestamp,
+    VerificationId CHAR(36) PRIMARY KEY,
+    User CHAR(36),
+    VerifyToken VARCHAR(255) NOT NULL,
+    ExpiresAt TIMESTAMP NOT NULL,
+    IsUsed BOOLEAN DEFAULT FALSE,
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL,
     FOREIGN KEY (User) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Permissions(
+    PermissionID CHAR(36) PRIMARY KEY,
+    PermissionName VARCHAR(255) NOT NULL UNIQUE,
+    PermissionDesc VARCHAR(255),
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL
+);
+
+CREATE TABLE RolePermissions(
+    RoleID CHAR(36) NOT NULL,
+    PermissionID CHAR(36) NOT NULL,
+    CreatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    DeletedAt TIMESTAMP NULL,
+    PRIMARY KEY (RoleID, PermissionID),
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleID),
+    FOREIGN KEY (PermissionID) REFERENCES Permissions(PermissionID)
 );

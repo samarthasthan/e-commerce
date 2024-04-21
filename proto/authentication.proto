@@ -9,6 +9,7 @@ message SignUpRequest {
   string email = 3;
   string phone_no = 4;
   string password = 5;
+  string role = 6;
 }
 
 message SignUpResponse {
@@ -17,7 +18,19 @@ message SignUpResponse {
   string message = 2;
 }
 
+message SignInRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message SignInResponse {
+  string token_type = 1;
+  string access_token = 2;
+  string renewal_token = 3;
+}
+
 service AuthenticationService {
   // Service definition for authentication
   rpc SignUp(SignUpRequest) returns (SignUpResponse);
+  rpc SignIn(SignInRequest) returns (SignInResponse);
 }
