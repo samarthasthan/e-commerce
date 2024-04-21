@@ -1,46 +1,49 @@
 # Multi-Vendor E-commerce Platform
 
-Welcome to the Multi-Vendor E-Commerce Platform project! This project aims to create a scalable, feature-rich e-commerce platform similar to Amazon and Flipkart. It includes an admin portal for managing the platform, a vendor portal for sellers, and a public website for customers.
+Welcome to the Multi-Vendor E-commerce Platform project! This project aims to create a scalable, feature-rich e-commerce platform similar to Amazon and Flipkart. It includes an admin portal for managing the platform, a vendor portal for sellers, and a public website for customers.
 
 ## Technologies Used
 
 <p align="left">
-<img src="./others/logos/go.png" alt="go" width="100" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/reactjs.png" alt="reactjs" width="45" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/Next.js logo.svg" alt="nextjs" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/grpc.png" alt="grpc" width="60" height="50" style="margin-right: 10px"/>
-<img src="./others/logos/kafka.png" alt="kafka" width="120" height="50" style="margin-right: 10px"/>
-<img src="./others/logos/graphql.png" alt="graphql" width="50" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/rest-api.webp" alt="rest-api" width="50" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/docker.png" alt="docker" width="70" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/kubernetes.png" alt="kubernetes" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/mysql.png" alt="mysql" width="100" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/mongodb.png" alt="mongodb" width="150" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/redis.png" alt="redis" width="120" height="40" style="margin-right: 10px"/>
-<img src="./others/logos//grafana.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/loki.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/prometheus.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/jaeger.png" alt="android" width="40" height="40" style="margin-right: 10px"/>
-<img src="./others/logos/elastic-search.png" alt="rest-api" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/go.png" alt="go" width="100" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/reactjs.png" alt="reactjs" width="45" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/Next.js logo.svg" alt="nextjs" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/grpc.png" alt="grpc" width="60" height="50" style="margin-right: 10px"/>
+  <img src="./others/logos/kafka.png" alt="kafka" width="120" height="50" style="margin-right: 10px"/>
+  <img src="./others/logos/graphql.png" width="50" height="50" alt="graphql" style="margin-right: 10px"/>
+  <img src="./others/logos/rest-api.webp" width="50" height="40" alt="rest-api" style="margin-right: 10px"/>
+  <img src="./others/logos/docker.png" width="70" height="40" alt="docker" style="margin-right: 10px"/>
+  <img src="./others/logos/kubernetes.png" alt="kubernetes" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/mysql.png" alt="mysql" width="100" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/mongodb.png" width="150" height="40" alt="mongodb" style="margin-right: 10px"/>
+  <img src="./others/logos/redis.png" width="120" height="40" alt="redis" style="margin-right: 10px"/>
+  <img src="./others/logos/grafana.png" alt="grafana" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/loki.png" alt="loki" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/prometheus.png" alt="prometheus" width="40" height="40" style="margin-right: 10px"/>
+  <img src="./others/logos/jaeger.png" width="40" height="40" alt="jaeger" style="margin-right: 10px"/>
+  <img src="./others/logos/elastic-search.png" alt="elastic-search" width="40" height="40" style="margin-right: 10px"/>
 </p>
 
-### Project Status
+## Project Status
 
-This project is currently in its early stages and is being developed by a solo developer. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
+This project is currently in its early stages and is being developed by a junior developer in a learning phase. Due to its complexity and scale, it is expected to take a considerable amount of time to complete. Contributions and feedback are welcome and appreciated.
 
-### Current State of the Project
+While I strive to be consistent at the beginning of the project, please understand that there may be times when my studies and other commitments affect my availability. Your patience and understanding are appreciated.
+
+## Current State of the Project
 
 Here's an overview of the tasks I'm currently working on and the next steps:
 
-- **Authentication**: Implementing the authentication service logic and connecting it to the broker or API Gateway service.
+- **Authentication**: Implementing the authentication service logic and connecting authentication gRPC to the broker or API Gateway service.
 - **Frontend Development**: Creating the admin portal dashboard.
-- **Logging and Monitoring**: Set up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
+- **Logging and Monitoring**: Setting up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
 
 ## Project Overview
 
-### High Level Design
+### High-Level Design
 
 ![Multi Vendor E-commerce](./others/designs/multi-vendor-e-commerce.png)
+*Caption: High-level design of the multi-vendor e-commerce platform.*
 
 This project is built using various technologies to ensure efficiency, scalability, and maintainability. Here's an overview of the key components:
 
@@ -56,6 +59,10 @@ This project is built using various technologies to ensure efficiency, scalabili
 
 ![Logging and Monitoring Screenshot](./others/images/Screenshot%202024-04-20%20at%206.29.09%20PM.png)
 
+### Admin Dashbaord Screenshot
+
+![Admin Dashboard](./others/images/Screenshot%202024-04-21%20at%205.14.16%20PM.png)
+
 ## Getting Started
 
 To get started with the project, follow these steps:
@@ -68,6 +75,8 @@ To get started with the project, follow these steps:
 For detailed setup instructions and additional information, please refer to the documentation in the `docs` directory.
 
 ## Port Configuration
+
+Here's a list of ports used by the project:
 
 | Name                 | Port  |
 | -------------------- | ----- |
@@ -94,6 +103,8 @@ For detailed setup instructions and additional information, please refer to the 
 ## Contribution Guidelines
 
 Contributions to the project are encouraged! Whether you're interested in adding new features, fixing bugs, or improving documentation, please feel free to submit pull requests. Make sure to follow the contribution guidelines outlined in `CONTRIBUTING.md`.
+
+As a junior developer in a learning phase, there may be areas where I'm making mistakes or could use improvements. If you find any such areas, I encourage you to correct them by creating pull requests. Your support and guidance are appreciated.
 
 ## Contact
 
