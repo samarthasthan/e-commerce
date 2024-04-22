@@ -5,7 +5,9 @@ import (
 	"log"
 
 	"github.com/samarthasthan/e-commerce/internal/authentication/database"
+	"github.com/samarthasthan/e-commerce/internal/authentication/delivery/grpc"
 	"github.com/samarthasthan/e-commerce/pkg/env"
+	"github.com/samarthasthan/e-commerce/pkg/logger"
 )
 
 var (
@@ -50,4 +52,11 @@ func main() {
 			log.Println(err.Error())
 		}
 	}()
+
+	// Initialising Custom Logger
+	log := logger.NewLogger("Authentication")
+
+	// Initialising gRPC Server
+	server := grpc.NewAuthenticationGrpcServer(log, mysql, redis)
+	server.Run(AUTHENTICATION_GRPC_PORT)
 }

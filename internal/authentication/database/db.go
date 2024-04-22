@@ -15,8 +15,8 @@ type Database interface {
 }
 
 type MySQL struct {
-	Quries *sqlc.Queries
-	DB     *sql.DB
+	Queries *sqlc.Queries
+	DB      *sql.DB
 }
 
 type Redis struct {
@@ -37,7 +37,7 @@ func (s *MySQL) Connect(addr string) error {
 		return err
 	}
 	s.DB = db
-	s.Quries = sqlc.New(db)
+	s.Queries = sqlc.New(db)
 	return nil
 }
 

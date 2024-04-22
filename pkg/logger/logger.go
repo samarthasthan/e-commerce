@@ -18,10 +18,6 @@ var (
 	LOKI_PORT = env.GetEnv("GRAFANA_LOKI_PORT", "15001")
 )
 
-type Log interface {
-	NewLogger(string) *Logger
-}
-
 type Logger struct {
 	*logrus.Logger
 }
