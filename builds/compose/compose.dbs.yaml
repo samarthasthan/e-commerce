@@ -20,16 +20,16 @@ services:
     ports:
       - "${AUTHENTICATION_REDIS_PORT}:6379"
 
-  account-mongodb:
-    image: mongo
-    container_name: account-mongodb
-    networks:
-      - ecommerce
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${ACCOUNT_MONGO_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${ACCOUNT_MONGO_ROOT_PASSWORD}
-    ports:
-      - "${ACCOUNT_MONGO_ROOT_PORT}:27017"
+  # account-mongodb:
+  #   image: mongo
+  #   container_name: account-mongodb
+  #   networks:
+  #     - ecommerce
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=${ACCOUNT_MONGO_ROOT_USERNAME}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${ACCOUNT_MONGO_ROOT_PASSWORD}
+  #   ports:
+  #     - "${ACCOUNT_MONGO_ROOT_PORT}:27017"
 
 networks:
   ecommerce:
