@@ -36,4 +36,5 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/sys v0.19.0 // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )

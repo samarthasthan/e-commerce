@@ -35,6 +35,6 @@ func (g *AuthenticationGrpcServer) Run(port string) {
 	g.log.Infof("Authentication gRPC server listening on port %s", port)
 	err = g.server.Serve(listener)
 	if err != nil {
-		g.log.Fatalf("Failed to serve gRPC server: %v", err)
+		g.log.Fatalf("Failed to serve Authentication gRPC server: %v", err)
 	}
 }

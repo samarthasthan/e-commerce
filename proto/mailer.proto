@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/samarthasthan/e-commerce/proto_go";
+
+message MailRequest {
+    string email = 1;
+    string body = 2;
+}
+
+message MailResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+service MailService {
+    rpc SendMail(MailRequest) returns (MailResponse);
+}
