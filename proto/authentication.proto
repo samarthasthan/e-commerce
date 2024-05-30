@@ -9,7 +9,7 @@ message SignUpRequest {
   string email = 3;
   string phone_no = 4;
   string password = 5;
-  string role = 6;
+  string role_name = 6;
 }
 
 message SignUpResponse {

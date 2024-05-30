@@ -1,5 +1,5 @@
 -- name: CreateAccount :execresult
-INSERT INTO Users (UserID, FirstName, LastName, Email, PhoneNo, Password, Role)
+INSERT INTO Users (UserID, FirstName, LastName, Email, PhoneNo, Password, RoleID)
 VALUES (?,?,?,?,?,?,?);
 
 -- name: GetPassword :one

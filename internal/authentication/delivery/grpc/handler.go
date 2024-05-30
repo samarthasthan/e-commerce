@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -33,7 +32,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 		return nil, fmt.Errorf("mysql is not of type *database.MySQL")
 	}
 
-	role, err := mysql.Queries.GetRole(ctx, in.Role)
+	role, err := mysql.Queries.GetRole(ctx, in.RoleName)
 
 	if err != nil {
 		return nil, err
@@ -55,7 +54,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 		Email:     in.Email,
 		Phoneno:   in.PhoneNo,
 		Password:  pass,
-		Role:      sql.NullString{String: role, Valid: true},
+		Roleid:    role,
 	})
 
 	// Handle any errors that occurred during the CreateAccount query

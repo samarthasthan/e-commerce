@@ -11,7 +11,7 @@ import (
 )
 
 const createAccount = `-- name: CreateAccount :execresult
-INSERT INTO Users (UserID, FirstName, LastName, Email, PhoneNo, Password, Role)
+INSERT INTO Users (UserID, FirstName, LastName, Email, PhoneNo, Password, RoleID)
 VALUES (?,?,?,?,?,?,?)
 `
 
@@ -22,7 +22,7 @@ type CreateAccountParams struct {
 	Email     string
 	Phoneno   string
 	Password  string
-	Role      sql.NullString
+	Roleid    string
 }
 
 func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
@@ -33,7 +33,7 @@ func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (s
 		arg.Email,
 		arg.Phoneno,
 		arg.Password,
-		arg.Role,
+		arg.Roleid,
 	)
 }
 
