@@ -6,6 +6,7 @@ import (
 
 	"github.com/samarthasthan/e-commerce/grpc_clients"
 	"github.com/samarthasthan/e-commerce/internal/broker/delivery/rest"
+	"github.com/samarthasthan/e-commerce/internal/broker/validation"
 	"github.com/samarthasthan/e-commerce/pkg/env"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
 )
@@ -23,6 +24,8 @@ func init() {
 func main() {
 	log := logger.NewLogger("Broker")
 
+	validator := validation.NewValidator()
+
 	authentitcationClient := grpc_clients.NewAuthenticationClient(log)
 	if ac_err := authentitcationClient.Connect(AUTHENTICATION_GRPC_PORT); ac_err != nil {
 		log.Errorf("Broker not able to connect to Authentication service, msg %v", ac_err.Error())
@@ -30,7 +33,7 @@ func main() {
 	}
 	defer authentitcationClient.Close()
 
-	handler := rest.NewRestHandler(authentitcationClient.Client, log)
+	handler := rest.NewRestHandler(authentitcationClient.Client, validator, log)
 	handler.Handle()
 
 	server := &http.Server{
