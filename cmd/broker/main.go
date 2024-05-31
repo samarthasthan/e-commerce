@@ -18,7 +18,6 @@ var (
 func init() {
 	BROKER_REST_PORT = env.GetEnv("BROKER_REST_PORT", "7000")
 	AUTHENTICATION_GRPC_PORT = env.GetEnv("AUTHENTICATION_GRPC_PORT", "8000")
-
 }
 
 func main() {
@@ -27,6 +26,7 @@ func main() {
 	authentitcationClient := grpc_clients.NewAuthenticationClient(log)
 	if ac_err := authentitcationClient.Connect(AUTHENTICATION_GRPC_PORT); ac_err != nil {
 		log.Errorf("Broker not able to connect to Authentication service, msg %v", ac_err.Error())
+
 	}
 	defer authentitcationClient.Close()
 
