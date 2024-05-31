@@ -14,19 +14,26 @@ type MailGrpcServer struct {
 	server *grpc.Server
 }
 
-func NewMailGrpcServer(l *logger.Logger) *MailGrpcServer {
+func NewMailGrpcServer(
+	l *logger.Logger,
+) *MailGrpcServer {
 	server := grpc.NewServer()
 	return &MailGrpcServer{log: l, server: server}
 }
 
-func (g *MailGrpcServer) Run(port string) {
+func (g *MailGrpcServer) Run(
+	port string,
+	SMTP_SERVER string,
+	SMTP_PORT string,
+	SMTP_LOGIN string,
+	SMTP_PASSWORD string) {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		g.log.Fatalf("Failed to listen on port %s: %v", port, err)
 	}
 	defer listener.Close()
 
-	ms := NewMailHandler()
+	ms := NewMailHandler(SMTP_SERVER, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD)
 	proto_go.RegisterMailServiceServer(g.server, ms)
 
 	g.log.Infof("Mail gRPC server listening on port %s", port)

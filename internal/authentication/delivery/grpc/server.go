@@ -11,15 +11,16 @@ import (
 )
 
 type AuthenticationGrpcServer struct {
-	log    *logger.Logger
-	mysql  database.Database
-	redis  database.Database
-	server *grpc.Server
+	log        *logger.Logger
+	mysql      database.Database
+	redis      database.Database
+	server     *grpc.Server
+	mailClient proto_go.MailServiceClient
 }
 
-func NewAuthenticationGrpcServer(log *logger.Logger, mysql, redis database.Database) *AuthenticationGrpcServer {
+func NewAuthenticationGrpcServer(log *logger.Logger, mysql, redis database.Database, mailCleint proto_go.MailServiceClient) *AuthenticationGrpcServer {
 	server := grpc.NewServer()
-	return &AuthenticationGrpcServer{log: log, mysql: mysql, redis: redis, server: server}
+	return &AuthenticationGrpcServer{log: log, mysql: mysql, redis: redis, server: server, mailClient: mailCleint}
 }
 
 func (g *AuthenticationGrpcServer) Run(port string) {
@@ -29,7 +30,7 @@ func (g *AuthenticationGrpcServer) Run(port string) {
 	}
 	defer listener.Close()
 
-	as := NewAuthenticationHandler(g.mysql, g.redis)
+	as := NewAuthenticationHandler(g.mysql, g.redis, g.mailClient)
 	proto_go.RegisterAuthenticationServiceServer(g.server, as)
 
 	g.log.Infof("Authentication gRPC server listening on port %s", port)

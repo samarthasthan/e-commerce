@@ -13,14 +13,25 @@ import (
 
 type AuthenticationHandler struct {
 	proto_go.UnimplementedAuthenticationServiceServer
-	mysql database.Database
-	redis database.Database
+	mailClient proto_go.MailServiceClient
+	mysql      database.Database
+	redis      database.Database
 }
 
-func NewAuthenticationHandler(mysql database.Database, redis database.Database) *AuthenticationHandler {
+func NewAuthenticationHandler(mysql database.Database, redis database.Database, mailClient proto_go.MailServiceClient) *AuthenticationHandler {
+	if mysql == nil {
+		panic("mysql dependency must not be nil")
+	}
+	if redis == nil {
+		panic("redis dependency must not be nil")
+	}
+	if mailClient == nil {
+		panic("mailClient dependency must not be nil")
+	}
 	return &AuthenticationHandler{
-		mysql: mysql,
-		redis: redis,
+		mysql:      mysql,
+		redis:      redis,
+		mailClient: mailClient,
 	}
 }
 
@@ -60,6 +71,19 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	// Handle any errors that occurred during the CreateAccount query
 	if err != nil {
 		return nil, err
+	}
+
+	if h.mailClient == nil {
+		return nil, fmt.Errorf("mailClient is nil")
+	}
+
+	_, err = h.mailClient.SendMail(ctx, &proto_go.MailRequest{
+		Email:   in.Email,
+		Subject: "OTP for account verification",
+		Body:    "<h1>OTP is 9045</h1>",
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to send email: %v", err)
 	}
 
 	// Return a successful SignUpResponse

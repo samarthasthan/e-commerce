@@ -1,0 +1,22 @@
+services:
+  mail:
+    build:
+      context: ../../
+      dockerfile: ./builds/docker/mail/Dockerfile
+    container_name: mail
+    image: ecommerce/mail
+    networks:
+      - ecommerce
+    environment:
+      - MAIL_GRPC_PORT=${MAIL_GRPC_PORT}
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_LOGIN=${SMTP_LOGIN}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    ports:
+      - "${MAIL_GRPC_PORT}:${MAIL_GRPC_PORT}"
+    command: ["./app"]
+
+networks:
+  ecommerce:
+    driver: bridge
