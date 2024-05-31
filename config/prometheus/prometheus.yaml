@@ -19,4 +19,5 @@ scrape_configs:
     static_configs:
       - targets:
           - prometheus:9090
-          - 172.235.16.92:7000
+          - vscode.samarthasthan.com:7000
+          - vscode.samarthasthan.com:8000
