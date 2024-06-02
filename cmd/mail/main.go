@@ -4,6 +4,7 @@ import (
 	"github.com/samarthasthan/e-commerce/internal/mail/delivery/grpc"
 	"github.com/samarthasthan/e-commerce/pkg/env"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
+	tracer "github.com/samarthasthan/e-commerce/pkg/zipkin"
 )
 
 var (
@@ -23,8 +24,15 @@ func init() {
 }
 
 func main() {
+	// Initialising Custom Logger
 	log := logger.NewLogger("Mail")
 
-	server := grpc.NewMailGrpcServer(log)
+	// create a new Zipkin tracer
+	tracer, err := tracer.NewTracer("mail", 12000)
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+
+	server := grpc.NewMailGrpcServer(log, tracer)
 	server.Run(MAIL_GRPC_PORT, SMTP_SERVER, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD)
 }

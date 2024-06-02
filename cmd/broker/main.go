@@ -35,7 +35,7 @@ func main() {
 
 	validator := validation.NewValidator()
 
-	authentitcationClient := grpc_clients.NewAuthenticationClient(log)
+	authentitcationClient := grpc_clients.NewAuthenticationClient(log, tracer)
 	if ac_err := authentitcationClient.Connect(AUTHENTICATION_GRPC_PORT); ac_err != nil {
 		log.Errorf("Broker not able to connect to Authentication service, msg %v", ac_err.Error())
 

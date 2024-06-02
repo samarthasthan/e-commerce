@@ -63,6 +63,7 @@ func (s *RestHandler) Handle() {
 		s.tracer,
 		zipkinhttp.SpanName("broker"),
 	)
+	
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("GET /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.GetUser))))
 	s.mux.Handle("POST /user", MetricsMiddleware(http.HandlerFunc(s.CreateUser)))

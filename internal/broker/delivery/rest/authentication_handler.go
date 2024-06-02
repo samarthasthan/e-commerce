@@ -3,20 +3,12 @@ package rest
 import (
 	"context"
 	"encoding/json"
-	"math/rand"
 	"net/http"
-	"time"
 
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
 	"github.com/samarthasthan/e-commerce/proto_go"
 	"github.com/sirupsen/logrus"
 )
-
-// randomDelay introduces a random delay between 0 and maxDelay milliseconds
-func randomDelay(maxDelay int) {
-	delay := time.Duration(rand.Intn(maxDelay)) * time.Millisecond
-	time.Sleep(delay)
-}
 
 func (s *RestHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -30,7 +22,6 @@ func (s *RestHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(errs)
 		return
 	}
-	randomDelay(1000)
 
 	errs = s.validator.SignUp(errs, &user)
 	if len(errs) > 0 {
@@ -57,7 +48,6 @@ func (s *RestHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *RestHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("GetUser"))
 }
 
@@ -66,26 +56,21 @@ func (s *RestHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *RestHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("DeleteUser"))
 }
 
 func (s *RestHandler) DisableUser(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("DisableUser"))
 }
 
 func (s *RestHandler) EmailVerify(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("EmailVerify"))
 }
 
 func (s *RestHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("LoginUser"))
 }
 
 func (s *RestHandler) ForgotPassword(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("ForgotPassword"))
 }
