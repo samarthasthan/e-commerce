@@ -12,7 +12,7 @@ I'm currently focusing on deepening my understanding of the Go `context` package
 - **Frontend**: React.js (Admin Portal), Next.js (Vendor Portal & Public Website).
 - **Containerization**: Docker for easy deployment and scaling.
 - **Databases**: MySQL, MongoDB, Redis.
-- **Monitoring and Logging**: Grafana, Loki, Prometheus, Jaeger.
+- **Monitoring and Logging**: Grafana, Loki, Prometheus, Zipkin.
 - **Messaging**: Kafka.
 
 ## Project Status
@@ -21,9 +21,13 @@ This project is in its early stages and is being developed by a junior developer
 
 ## Current Tasks and Next Steps
 
-- **Authentication**: Implementing the authentication service logic and connecting authentication gRPC to the broker or API Gateway service.
+- **Authentication**: Implementing the authentication service logic.
+  - Authentication and mail service are connected.
+  - Authentication and broker are connected.
 - **Frontend Development**: Creating the admin portal dashboard.
-- **Logging and Monitoring**: Setting up robust logging and monitoring systems using Grafana, Loki, and Prometheus. Tracing with Jaeger is still pending.
+- **Logging and Monitoring**:
+  - Implemented Loki and Prometheus.
+  - Implemented Zipkins.
 
 ## High-Level Design
 
@@ -42,6 +46,11 @@ The project employs various technologies to ensure efficiency, scalability, and 
 
 ![Monitoring and Logging](./others/images/Screenshot%202024-04-20%20at%206.29.09%20PM.png)
 _Monitoring and logging dashboard._
+
+## Tracing Screenshot
+
+![Tracing](./others/images/Screenshot%202024-06-03%20at%202.46.48%20AM.png)
+_Tracing dashboard._
 
 ## Admin Dashboard Screenshot
 
