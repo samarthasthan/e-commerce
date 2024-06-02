@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/openzipkin/zipkin-go"
+	zipkinhttp "github.com/openzipkin/zipkin-go/middleware/http"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
@@ -37,6 +39,7 @@ type RestHandler struct {
 	authenticationClient proto_go.AuthenticationServiceClient
 	validator            *validation.Validator
 	log                  *logger.Logger
+	tracer               *zipkin.Tracer
 }
 
 func init() {
@@ -44,20 +47,26 @@ func init() {
 	prometheus.MustRegister(requestDuration)
 }
 
-func NewRestHandler(ac proto_go.AuthenticationServiceClient, v *validation.Validator, l *logger.Logger, m *http.ServeMux) *RestHandler {
+func NewRestHandler(ac proto_go.AuthenticationServiceClient, v *validation.Validator, l *logger.Logger, m *http.ServeMux, t *zipkin.Tracer) *RestHandler {
 	return &RestHandler{
 		mux:                  m,
 		authenticationClient: ac,
 		validator:            v,
 		log:                  l,
+		tracer:               t,
 	}
 }
 
 func (s *RestHandler) Handle() {
+	// create a middleware that traces incoming requests
+	zipkinMiddleWare := zipkinhttp.NewServerMiddleware(
+		s.tracer,
+		zipkinhttp.SpanName("broker"),
+	)
 	s.mux.Handle("/metrics", promhttp.Handler())
-	s.mux.Handle("GET /user", MetricsMiddleware(http.HandlerFunc(s.GetUser)))
+	s.mux.Handle("GET /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.GetUser))))
 	s.mux.Handle("POST /user", MetricsMiddleware(http.HandlerFunc(s.CreateUser)))
-	s.mux.Handle("PUT /user", MetricsMiddleware(http.HandlerFunc(s.UpdateUser)))
+	s.mux.Handle("PUT /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.UpdateUser))))
 	s.mux.Handle("DELETE /user", MetricsMiddleware(http.HandlerFunc(s.DeleteUser)))
 	s.mux.Handle("POST /user-disable", MetricsMiddleware(http.HandlerFunc(s.DisableUser)))
 	s.mux.Handle("POST /email-verify", MetricsMiddleware(http.HandlerFunc(s.EmailVerify)))

@@ -62,7 +62,6 @@ func (s *RestHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *RestHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	randomDelay(1000)
 	w.Write([]byte("UpdateUser"))
 }
 

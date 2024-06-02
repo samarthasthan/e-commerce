@@ -9,6 +9,7 @@ import (
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
 	"github.com/samarthasthan/e-commerce/pkg/env"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
+	tracer "github.com/samarthasthan/e-commerce/pkg/zipkin"
 )
 
 var (
@@ -24,6 +25,12 @@ func init() {
 func main() {
 	log := logger.NewLogger("Broker")
 
+	// create a new Zipkin tracer
+	tracer, err := tracer.NewTracer("broker", 7000)
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+
 	mux := http.NewServeMux()
 
 	validator := validation.NewValidator()
@@ -35,7 +42,7 @@ func main() {
 	}
 	defer authentitcationClient.Close()
 
-	handler := rest.NewRestHandler(authentitcationClient.Client, validator, log, mux)
+	handler := rest.NewRestHandler(authentitcationClient.Client, validator, log, mux, tracer)
 	handler.Handle()
 
 	server := &http.Server{

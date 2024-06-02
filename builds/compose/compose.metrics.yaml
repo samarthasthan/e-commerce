@@ -39,15 +39,13 @@ services:
     volumes:
       - ../../config/prometheus:/etc/prometheus
 
-  jaeger:
-    image: jaegertracing/all-in-one
-    container_name: jaeger
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
     networks:
       - ecommerce
     ports:
-      - "6831:6831/udp"
-      - "16686:16686"
-      - "14268:14268"
+      - "9411:9411"
 
 networks:
   ecommerce:
