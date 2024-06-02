@@ -44,9 +44,9 @@ func init() {
 	prometheus.MustRegister(requestDuration)
 }
 
-func NewRestHandler(ac proto_go.AuthenticationServiceClient, v *validation.Validator, l *logger.Logger) *RestHandler {
+func NewRestHandler(ac proto_go.AuthenticationServiceClient, v *validation.Validator, l *logger.Logger, m *http.ServeMux) *RestHandler {
 	return &RestHandler{
-		mux:                  http.NewServeMux(),
+		mux:                  m,
 		authenticationClient: ac,
 		validator:            v,
 		log:                  l,

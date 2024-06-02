@@ -24,6 +24,8 @@ func init() {
 func main() {
 	log := logger.NewLogger("Broker")
 
+	mux := http.NewServeMux()
+
 	validator := validation.NewValidator()
 
 	authentitcationClient := grpc_clients.NewAuthenticationClient(log)
@@ -33,7 +35,7 @@ func main() {
 	}
 	defer authentitcationClient.Close()
 
-	handler := rest.NewRestHandler(authentitcationClient.Client, validator, log)
+	handler := rest.NewRestHandler(authentitcationClient.Client, validator, log, mux)
 	handler.Handle()
 
 	server := &http.Server{
