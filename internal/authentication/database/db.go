@@ -3,15 +3,19 @@ package database
 import (
 	"context"
 	"database/sql"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	zipkinsql "github.com/openzipkin-contrib/zipkin-go-sql"
+	"github.com/openzipkin/zipkin-go"
 	"github.com/redis/go-redis/v9"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database/mysql/sqlc"
 )
 
 type Database interface {
-	Connect(string) error
+	Connect(string,string) error
 	Close() error
+	RegisterZipkin(*zipkin.Tracer) string
 }
 
 type MySQL struct {
@@ -31,14 +35,23 @@ func NewRedis() *Redis {
 	return &Redis{}
 }
 
-func (s *MySQL) Connect(addr string) error {
-	db, err := sql.Open("mysql", addr)
+func (s *MySQL) Connect(driverName string, addr string) error {
+	db, err := sql.Open(driverName, addr)
 	if err != nil {
 		return err
 	}
 	s.DB = db
 	s.Queries = sqlc.New(db)
 	return nil
+}
+
+func (s *MySQL) RegisterZipkin(tracer *zipkin.Tracer) string {
+	// Register our zipkinsql wrapper for the provided MySQL driver.
+	driverName, err := zipkinsql.Register("mysql", tracer, zipkinsql.WithAllTraceOptions())
+	if err != nil {
+		log.Fatalf("unable to register zipkin driver: %v\n", err)
+	}
+	return driverName
 }
 
 func (s *MySQL) Close() error {
@@ -49,7 +62,7 @@ func (s *MySQL) Close() error {
 	return nil
 }
 
-func (r *Redis) Connect(addr string) error {
+func (r *Redis) Connect(string,addr string) error {
 	ctx := context.Background()
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     addr,
@@ -61,6 +74,10 @@ func (r *Redis) Connect(addr string) error {
 		return err
 	}
 	return nil
+}
+
+func (r *Redis) RegisterZipkin(tracer *zipkin.Tracer) string {
+	return "redis"
 }
 
 func (r *Redis) Close() error {

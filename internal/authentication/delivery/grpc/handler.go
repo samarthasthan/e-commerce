@@ -39,7 +39,6 @@ func NewAuthenticationHandler(mysql database.Database, redis database.Database, 
 
 // SignUp handles the SignUp gRPC request
 func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpRequest) (*proto_go.SignUpResponse, error) {
-
 	mysql, ok := h.mysql.(*database.MySQL)
 	if !ok {
 		return nil, fmt.Errorf("mysql is not of type *database.MySQL")
@@ -83,7 +82,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	mail := &models.Mail{To: in.Email, Subject: "Welcome to E-commerce", Body: "<h1>Your account has been created successfully</h1>"}
 
 	// Produce a message to the mail topic
-	h.kp.ProduceMsg([]string{"mail"}, mail)
+	h.kp.ProduceMsg(ctx, "mail", mail)
 	// Handle any errors that occurred during the ProduceMsg function
 	if err != nil {
 		return nil, err

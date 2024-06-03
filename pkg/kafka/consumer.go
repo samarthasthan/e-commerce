@@ -7,7 +7,7 @@ import (
 )
 
 type Consumer struct {
-	Consumer *kafka.Consumer
+	*kafka.Consumer
 }
 
 func NewKafkaConsumer(host string, port string) *Consumer {

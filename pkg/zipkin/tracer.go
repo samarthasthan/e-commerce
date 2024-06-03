@@ -1,27 +1,30 @@
 package tracer
 
 import (
+	"fmt"
 	"log"
 	"net"
 
 	"github.com/openzipkin/zipkin-go"
 	"github.com/openzipkin/zipkin-go/model"
-	"github.com/openzipkin/zipkin-go/reporter"
 	httpreporter "github.com/openzipkin/zipkin-go/reporter/http"
+	"github.com/samarthasthan/e-commerce/pkg/env"
 )
+
+var (
+	ZIPKIN_HOST string
+	ZIPKIN_PORT string
+)
+
+func init() {
+	ZIPKIN_HOST = env.GetEnv("ZIPKIN_HOST", "localhost")
+	ZIPKIN_PORT = env.GetEnv("ZIPKIN_PORT", "9411")
+}
 
 func NewTracer(serviceName string, port uint16) (*zipkin.Tracer, error) {
 
-	var reporter reporter.Reporter
-
-	// if exampleconfig.Config["ENCODING"] == "json" {
-	// 	// Default JSON V2 reporter
-	reporter = httpreporter.NewReporter("http://localhost:9411/api/v2/spans")
-	// } else if exampleconfig.Config["ENCODING"] == "protobuf" {
-	// 	// Protobuf reporter
-	// 	reporterOption := httpreporter.Serializer(zipkin_proto3.SpanSerializer{})
-	// 	reporter = httpreporter.NewReporter(exampleconfig.Config["ENDPOINT"], reporterOption)
-	// }
+	// Create a reporter to be used by the tracer
+	reporter := httpreporter.NewReporter(fmt.Sprintf("http://%s:%s/api/v2/spans", ZIPKIN_HOST, ZIPKIN_PORT))
 
 	// Local endpoint represent the local service information
 	localEndpoint := &model.Endpoint{ServiceName: serviceName, IPv4: getOutboundIP(), Port: port}

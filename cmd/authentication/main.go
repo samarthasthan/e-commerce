@@ -20,7 +20,7 @@ var (
 	AUTHENTICATION_REDIS_HOST          string
 	MAIL_GRPC_PORT                     string
 	KAFKA_PORT                         string
-	KAFKA_HOST                       string
+	KAFKA_HOST                         string
 )
 
 func init() {
@@ -39,8 +39,14 @@ func main() {
 	// Initialising Custom Logger
 	log := logger.NewLogger("Authentication")
 
-	// create a new Zipkin tracer
-	tracer, err := tracer.NewTracer("authentication", 8000)
+	// create a new Zipkin tracer for grpc server
+	rt, err := tracer.NewTracer("authentication", 8000)
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+
+	// create a new Zipkin tracer for mysql
+	sqlt, err := tracer.NewTracer("authentication-mysql", 8001)
 	if err != nil {
 		log.Fatalf("failed to create tracer: %v", err)
 	}
@@ -50,12 +56,13 @@ func main() {
 
 	// Initialising Databases
 	mysql := database.NewMySQL()
+
 	redis := database.NewRedis()
-	err = mysql.Connect(fmt.Sprintf("root:%s@tcp(%s:%s)/authentication", AUTHENTICATION_MYSQL_ROOT_PASSWORD, AUTHENTICATION_MYSQL_HOST, AUTHENTICATION_MYSQL_PORT))
+	err = mysql.Connect(mysql.RegisterZipkin(sqlt), fmt.Sprintf("root:%s@tcp(%s:%s)/authentication", AUTHENTICATION_MYSQL_ROOT_PASSWORD, AUTHENTICATION_MYSQL_HOST, AUTHENTICATION_MYSQL_PORT))
 	if err != nil {
 		log.Println(err.Error())
 	}
-	err = redis.Connect(fmt.Sprintf("%s:%s", AUTHENTICATION_REDIS_HOST, AUTHENTICATION_REDIS_PORT))
+	err = redis.Connect("redis", fmt.Sprintf("%s:%s", AUTHENTICATION_REDIS_HOST, AUTHENTICATION_REDIS_PORT))
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -73,6 +80,6 @@ func main() {
 	}()
 
 	// Initialising gRPC Server
-	server := grpc.NewAuthenticationGrpcServer(log, mysql, redis, p, tracer)
+	server := grpc.NewAuthenticationGrpcServer(log, mysql, redis, p, rt)
 	server.Run(AUTHENTICATION_GRPC_PORT)
 }

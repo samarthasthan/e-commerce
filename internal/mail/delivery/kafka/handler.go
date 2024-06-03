@@ -13,8 +13,9 @@ import (
 )
 
 type MailHandler struct {
-	consumer      *kafka.Consumer
-	log           *logger.Logger
+	consumer *kafka.Consumer
+	log      *logger.Logger
+
 	SMTP_SERVER   string
 	SMTP_PORT     string
 	SMTP_LOGIN    string
@@ -42,7 +43,7 @@ func NewMailHandler(
 func (h *MailHandler) SendMails() error {
 	h.consumer.Subscribe([]string{"mail"})
 	for {
-		msg, err := h.consumer.Consumer.ReadMessage(time.Second)
+		msg, err := h.consumer.ReadMessage(5 * time.Second)
 		if err != nil {
 			// h.log.Errorf("Error reading message: %v", err)
 			continue
@@ -59,21 +60,24 @@ func (h *MailHandler) SendMails() error {
 }
 
 func (h *MailHandler) SendMail(in *models.Mail) error {
-	from := h.SMTP_LOGIN
-	to := in.To
-	host := h.SMTP_SERVER
-	port, err := strconv.Atoi(h.SMTP_PORT)
+	from := h.SMTP_LOGIN                   // Sender email
+	to := in.To                            // Recipient email
+	host := h.SMTP_SERVER                  // SMTP server
+	port, err := strconv.Atoi(h.SMTP_PORT) // SMTP port
+
 	if err != nil {
 		return err
 	}
-	msg := gomail.NewMessage()
-	msg.SetHeader("From", "noreply@samarthasthan.com")
-	msg.SetHeader("To", to)
-	msg.SetHeader("Subject", in.Subject)
-	// text/html for a html email
-	msg.SetBody("text/html", in.Body)
 
-	n := gomail.NewDialer(host, port, from, h.SMTP_PASSWORD)
+	// Message
+	msg := gomail.NewMessage()
+	msg.SetHeader("From", "noreply@samarthasthan.com") // Sender email
+	msg.SetHeader("To", to)                            // Recipient email
+	msg.SetHeader("Subject", in.Subject)               // Subject of the email
+	// text/html for a html email
+	msg.SetBody("text/html", in.Body) // Body of the email
+
+	n := gomail.NewDialer(host, port, from, h.SMTP_PASSWORD) // SMTP server details
 
 	// Send the email
 	if err := n.DialAndSend(msg); err != nil {

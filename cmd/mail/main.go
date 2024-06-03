@@ -5,7 +5,6 @@ import (
 	"github.com/samarthasthan/e-commerce/pkg/env"
 	"github.com/samarthasthan/e-commerce/pkg/kafka"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
-	tracer "github.com/samarthasthan/e-commerce/pkg/zipkin"
 )
 
 var (
@@ -31,12 +30,6 @@ func init() {
 func main() {
 	// Initialising Custom Logger
 	log := logger.NewLogger("Mail")
-
-	// create a new Zipkin tracer
-	_, err := tracer.NewTracer("mail", 12000)
-	if err != nil {
-		log.Fatalf("failed to create tracer: %v", err)
-	}
 
 	// Initialising Kafka Consumer
 	k := kafka.NewKafkaConsumer(KAFKA_HOST, KAFKA_PORT)

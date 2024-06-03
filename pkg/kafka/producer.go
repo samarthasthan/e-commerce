@@ -1,6 +1,7 @@
 package kafka
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,7 +10,7 @@ import (
 )
 
 type Producer struct {
-	*kafka.Producer
+	producer *kafka.Producer
 }
 
 func NewKafkaProducer(host string, port string) *Producer {
@@ -18,24 +19,23 @@ func NewKafkaProducer(host string, port string) *Producer {
 		panic(err)
 	}
 	return &Producer{
-		p,
+		producer: p,
 	}
 
 }
 
-func (kp *Producer) ProduceMsg(topics []string, msg any) error {
+func (kp *Producer) ProduceMsg(ctx context.Context, topic string, msg any) error {
 	data, err := json.Marshal(msg)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	for _, topic := range topics {
-		err = kp.Producer.Produce(&kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			Value:          data,
-		}, nil)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	err = kp.producer.Produce(&kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+		Value:          data,
+	}, nil)
+
+	if err != nil {
+		log.Fatalln(err)
 	}
 	return err
 }
