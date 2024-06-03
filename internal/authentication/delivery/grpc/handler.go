@@ -8,30 +8,32 @@ import (
 	"github.com/samarthasthan/e-commerce/internal/authentication/database"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database/mysql/sqlc"
 	"github.com/samarthasthan/e-commerce/pkg/bcrpyt"
+	"github.com/samarthasthan/e-commerce/pkg/kafka"
+	"github.com/samarthasthan/e-commerce/pkg/models"
 	"github.com/samarthasthan/e-commerce/proto_go"
 )
 
 type AuthenticationHandler struct {
 	proto_go.UnimplementedAuthenticationServiceServer
-	mailClient proto_go.MailServiceClient
-	mysql      database.Database
-	redis      database.Database
+	kp    *kafka.Producer
+	mysql database.Database
+	redis database.Database
 }
 
-func NewAuthenticationHandler(mysql database.Database, redis database.Database, mailClient proto_go.MailServiceClient) *AuthenticationHandler {
+func NewAuthenticationHandler(mysql database.Database, redis database.Database, kp *kafka.Producer) *AuthenticationHandler {
 	if mysql == nil {
 		panic("mysql dependency must not be nil")
 	}
 	if redis == nil {
 		panic("redis dependency must not be nil")
 	}
-	if mailClient == nil {
-		panic("mailClient dependency must not be nil")
+	if kp == nil {
+		panic("kafka dependency must not be nil")
 	}
 	return &AuthenticationHandler{
-		mysql:      mysql,
-		redis:      redis,
-		mailClient: mailClient,
+		mysql: mysql,
+		redis: redis,
+		kp:    kp,
 	}
 }
 
@@ -73,17 +75,18 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 		return nil, err
 	}
 
-	if h.mailClient == nil {
-		return nil, fmt.Errorf("mailClient is nil")
+	if h.kp == nil {
+		return nil, fmt.Errorf("kafka is nil")
 	}
 
-	_, err = h.mailClient.SendMail(ctx, &proto_go.MailRequest{
-		Email:   in.Email,
-		Subject: "OTP for account verification",
-		Body:    "<h1>OTP is 9045</h1>",
-	})
+	// Create a new Mail struct
+	mail := &models.Mail{To: in.Email, Subject: "Welcome to E-commerce", Body: "<h1>Your account has been created successfully</h1>"}
+
+	// Produce a message to the mail topic
+	h.kp.ProduceMsg([]string{"mail"}, mail)
+	// Handle any errors that occurred during the ProduceMsg function
 	if err != nil {
-		return nil, fmt.Errorf("failed to send email: %v", err)
+		return nil, err
 	}
 
 	// Return a successful SignUpResponse

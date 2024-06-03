@@ -1,4 +1,22 @@
 services:
+  # Kafka
+  kafka:
+    build:
+      context: ../docker/kafka
+      dockerfile: ./Dockerfile
+    container_name: kafka
+    ports:
+      - ${KAFKA_EXTERNAL_PORT}:9092
+    networks:
+      - ecommerce
+    healthcheck:
+      test:
+        ["CMD-SHELL", "./wait-for.sh kafka:${KAFKA_PORT} -- ./kafka_setup.sh"]
+      interval: 30s
+      timeout: 30s
+      retries: 100
+      start_period: 30s
+
   mail:
     build:
       context: ../../
@@ -8,14 +26,16 @@ services:
     networks:
       - ecommerce
     environment:
-      - MAIL_GRPC_PORT=${MAIL_GRPC_PORT}
       - SMTP_SERVER=${SMTP_SERVER}
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_LOGIN=${SMTP_LOGIN}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
-    ports:
-      - "${MAIL_GRPC_PORT}:${MAIL_GRPC_PORT}"
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
     command: ["./app"]
+    depends_on:
+      kafka:
+        condition: service_healthy
 
 networks:
   ecommerce:
