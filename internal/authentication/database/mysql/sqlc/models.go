@@ -65,14 +65,14 @@ type Permission struct {
 }
 
 type Reset struct {
-	Resetid    string
-	User       sql.NullString
-	Resettoken string
-	Expiresat  time.Time
-	Isused     sql.NullBool
-	Createdat  time.Time
-	Updatedat  time.Time
-	Deletedat  sql.NullTime
+	Resetid   string
+	Userid    string
+	Otp       int32
+	Expiresat time.Time
+	Isused    sql.NullBool
+	Createdat time.Time
+	Updatedat time.Time
+	Deletedat sql.NullTime
 }
 
 type Role struct {
@@ -109,8 +109,8 @@ type User struct {
 
 type Verification struct {
 	Verificationid string
-	User           sql.NullString
-	Verifytoken    string
+	Userid         string
+	Otp            int32
 	Expiresat      time.Time
 	Isused         sql.NullBool
 	Createdat      time.Time

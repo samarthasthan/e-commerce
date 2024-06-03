@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/samarthasthan/e-commerce/grpc_clients"
 	"github.com/samarthasthan/e-commerce/internal/broker/delivery/rest"
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
 	"github.com/samarthasthan/e-commerce/pkg/env"
+	"github.com/samarthasthan/e-commerce/pkg/grpc_clients"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
 	tracer "github.com/samarthasthan/e-commerce/pkg/zipkin"
 )

@@ -5,7 +5,7 @@ import (
 
 	"github.com/openzipkin/zipkin-go"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
-	"github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 )
 
 type AuthenticationClient struct {

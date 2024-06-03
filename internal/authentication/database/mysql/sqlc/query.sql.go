@@ -7,12 +7,12 @@ package sqlc
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
-const createAccount = `-- name: CreateAccount :execresult
+const createAccount = `-- name: CreateAccount :exec
 INSERT INTO Users (UserID, FirstName, LastName, Email, PhoneNo, Password, RoleID)
-VALUES (?,?,?,?,?,?,?)
+VALUES (?,?,?,?,?,?,(SELECT RoleID FROM Roles WHERE RoleName = ?))
 `
 
 type CreateAccountParams struct {
@@ -22,41 +22,75 @@ type CreateAccountParams struct {
 	Email     string
 	Phoneno   string
 	Password  string
-	Roleid    string
+	Rolename  string
 }
 
-func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createAccount,
+func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) error {
+	_, err := q.db.ExecContext(ctx, createAccount,
 		arg.Userid,
 		arg.Firstname,
 		arg.Lastname,
 		arg.Email,
 		arg.Phoneno,
 		arg.Password,
-		arg.Roleid,
+		arg.Rolename,
 	)
+	return err
 }
 
-const getPassword = `-- name: GetPassword :one
-SELECT Password from Users
-WHERE Email = ?
+const createVerification = `-- name: CreateVerification :exec
+INSERT INTO Verifications (VerificationId, UserID, OTP, ExpiresAt)
+VALUES (?,?,?,?)
 `
 
-func (q *Queries) GetPassword(ctx context.Context, email string) (string, error) {
-	row := q.db.QueryRowContext(ctx, getPassword, email)
-	var password string
-	err := row.Scan(&password)
-	return password, err
+type CreateVerificationParams struct {
+	Verificationid string
+	Userid         string
+	Otp            int32
+	Expiresat      time.Time
 }
 
-const getRole = `-- name: GetRole :one
-SELECT RoleID from Roles
-WHERE RoleName = ?
+func (q *Queries) CreateVerification(ctx context.Context, arg CreateVerificationParams) error {
+	_, err := q.db.ExecContext(ctx, createVerification,
+		arg.Verificationid,
+		arg.Userid,
+		arg.Otp,
+		arg.Expiresat,
+	)
+	return err
+}
+
+const deleteVerification = `-- name: DeleteVerification :exec
+DELETE FROM Verifications WHERE VerificationId = ?
 `
 
-func (q *Queries) GetRole(ctx context.Context, rolename string) (string, error) {
-	row := q.db.QueryRowContext(ctx, getRole, rolename)
-	var roleid string
-	err := row.Scan(&roleid)
-	return roleid, err
+func (q *Queries) DeleteVerification(ctx context.Context, verificationid string) error {
+	_, err := q.db.ExecContext(ctx, deleteVerification, verificationid)
+	return err
+}
+
+const getOTP = `-- name: GetOTP :one
+SELECT OTP, UserID, ExpiresAt FROM Verifications WHERE VerificationId = ?
+`
+
+type GetOTPRow struct {
+	Otp       int32
+	Userid    string
+	Expiresat time.Time
+}
+
+func (q *Queries) GetOTP(ctx context.Context, verificationid string) (GetOTPRow, error) {
+	row := q.db.QueryRowContext(ctx, getOTP, verificationid)
+	var i GetOTPRow
+	err := row.Scan(&i.Otp, &i.Userid, &i.Expiresat)
+	return i, err
+}
+
+const verifyAccount = `-- name: VerifyAccount :exec
+UPDATE Users SET IsVerified = 1 WHERE UserID = ?
+`
+
+func (q *Queries) VerifyAccount(ctx context.Context, userid string) error {
+	_, err := q.db.ExecContext(ctx, verifyAccount, userid)
+	return err
 }

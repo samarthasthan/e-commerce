@@ -10,7 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
-	"github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 )
 
 var (
@@ -63,14 +63,14 @@ func (s *RestHandler) Handle() {
 		s.tracer,
 		zipkinhttp.SpanName("broker"),
 	)
-	
+
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("GET /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.GetUser))))
 	s.mux.Handle("POST /user", MetricsMiddleware(http.HandlerFunc(s.CreateUser)))
 	s.mux.Handle("PUT /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.UpdateUser))))
 	s.mux.Handle("DELETE /user", MetricsMiddleware(http.HandlerFunc(s.DeleteUser)))
 	s.mux.Handle("POST /user-disable", MetricsMiddleware(http.HandlerFunc(s.DisableUser)))
-	s.mux.Handle("POST /email-verify", MetricsMiddleware(http.HandlerFunc(s.EmailVerify)))
+	s.mux.Handle("POST /otp-verify", MetricsMiddleware(http.HandlerFunc(s.OTPVerify)))
 	s.mux.Handle("POST /login", MetricsMiddleware(http.HandlerFunc(s.LoginUser)))
 	s.mux.Handle("POST /forgot-password", MetricsMiddleware(http.HandlerFunc(s.ForgotPassword)))
 }

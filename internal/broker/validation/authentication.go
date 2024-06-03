@@ -3,7 +3,7 @@ package validation
 import (
 	"regexp"
 
-	"github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 )
 
 func (v *Validator) SignUp(e []Error, u *proto_go.SignUpRequest) []Error {

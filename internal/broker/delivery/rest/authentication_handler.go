@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/samarthasthan/e-commerce/internal/broker/validation"
-	"github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -63,8 +63,8 @@ func (s *RestHandler) DisableUser(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("DisableUser"))
 }
 
-func (s *RestHandler) EmailVerify(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("EmailVerify"))
+func (s *RestHandler) OTPVerify(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OTPVerify"))
 }
 
 func (s *RestHandler) LoginUser(w http.ResponseWriter, r *http.Request) {

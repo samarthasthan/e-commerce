@@ -9,7 +9,7 @@ import (
 	"github.com/samarthasthan/e-commerce/internal/authentication/database"
 	"github.com/samarthasthan/e-commerce/pkg/kafka"
 	"github.com/samarthasthan/e-commerce/pkg/logger"
-	"github.com/samarthasthan/e-commerce/proto_go"
+	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 	"google.golang.org/grpc"
 )
 

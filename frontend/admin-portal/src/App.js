@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import SellerPage from "./pages/seller/SellerPage";
+import React from "react";
 
 const router = createBrowserRouter([
   {

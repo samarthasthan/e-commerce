@@ -20,12 +20,12 @@ grpc-clean-all: grpc-clean grpc-clean-js
 
 grpc-gen:
 	@echo "Generating Go code from Protocol Buffers..."
-	@protoc --go_out=paths=source_relative:proto_go --go-grpc_out=paths=source_relative:proto_go --proto_path=proto proto/*.proto
+	@protoc --go_out=paths=source_relative:./pkg/proto_go --go-grpc_out=paths=source_relative:./pkg/proto_go --proto_path=./pkg/proto ./pkg/proto/*.proto
 	@echo "Go code generation completed."
 
 grpc-clean:
 	@echo "Cleaning generated Go code..."
-	@rm -f proto_go/*.go
+	@rm -f ./pkg/proto_go/*.go
 	@echo "Clean completed."
 
 grpc-gen-js:
