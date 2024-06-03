@@ -26,10 +26,11 @@ func main() {
 	log := logger.NewLogger("Broker")
 
 	// create a new Zipkin tracer
-	tracer, err := tracer.NewTracer("broker", 7000)
+	tracer, reporter, err := tracer.NewTracer("broker", 7000)
 	if err != nil {
 		log.Fatalf("failed to create tracer: %v", err)
 	}
+	defer reporter.Close()
 
 	mux := http.NewServeMux()
 
@@ -56,7 +57,4 @@ func main() {
 	}
 
 	defer server.Close()
-
-	log.Infof("Broker listening on port :%s", BROKER_REST_PORT)
-
 }

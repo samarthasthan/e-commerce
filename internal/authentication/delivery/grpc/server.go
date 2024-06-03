@@ -46,4 +46,7 @@ func (g *AuthenticationGrpcServer) Run(port string) {
 	if err != nil {
 		g.log.Fatalf("Failed to serve Authentication gRPC server: %v", err)
 	}
+
+	defer g.server.GracefulStop()
+	g.log.Info("Authentication gRPC server stopped")
 }

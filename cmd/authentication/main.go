@@ -40,16 +40,18 @@ func main() {
 	log := logger.NewLogger("Authentication")
 
 	// create a new Zipkin tracer for grpc server
-	rt, err := tracer.NewTracer("authentication", 8000)
+	rt, rr, err := tracer.NewTracer("authentication", 8000)
 	if err != nil {
 		log.Fatalf("failed to create tracer: %v", err)
 	}
+	defer rr.Close()
 
 	// create a new Zipkin tracer for mysql
-	sqlt, err := tracer.NewTracer("authentication-mysql", 8001)
+	sqlt, sqlr, err := tracer.NewTracer("authentication-mysql", 8001)
 	if err != nil {
 		log.Fatalf("failed to create tracer: %v", err)
 	}
+	defer sqlr.Close()
 
 	// Initialising Kafka Producer
 	p := kafka.NewKafkaProducer(KAFKA_HOST, KAFKA_PORT)

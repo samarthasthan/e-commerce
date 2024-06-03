@@ -1,4 +1,4 @@
-package tracer
+package zipkinc
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/openzipkin/zipkin-go"
 	"github.com/openzipkin/zipkin-go/model"
+	"github.com/openzipkin/zipkin-go/reporter"
 	httpreporter "github.com/openzipkin/zipkin-go/reporter/http"
 	"github.com/samarthasthan/e-commerce/pkg/env"
 )
@@ -21,7 +22,7 @@ func init() {
 	ZIPKIN_PORT = env.GetEnv("ZIPKIN_PORT", "9411")
 }
 
-func NewTracer(serviceName string, port uint16) (*zipkin.Tracer, error) {
+func NewTracer(serviceName string, port uint16) (*zipkin.Tracer, reporter.Reporter, error) {
 
 	// Create a reporter to be used by the tracer
 	reporter := httpreporter.NewReporter(fmt.Sprintf("http://%s:%s/api/v2/spans", ZIPKIN_HOST, ZIPKIN_PORT))
@@ -33,7 +34,7 @@ func NewTracer(serviceName string, port uint16) (*zipkin.Tracer, error) {
 	// of traces.
 	sampler, err := zipkin.NewCountingSampler(1)
 	if err != nil {
-		return nil, err
+		return nil, reporter, err
 	}
 
 	tracer, err := zipkin.NewTracer(
@@ -42,10 +43,10 @@ func NewTracer(serviceName string, port uint16) (*zipkin.Tracer, error) {
 		zipkin.WithLocalEndpoint(localEndpoint),
 	)
 	if err != nil {
-		return nil, err
+		return nil, reporter, err
 	}
 
-	return tracer, err
+	return tracer, reporter, err
 }
 
 // Get preferred outbound ip of this machine
