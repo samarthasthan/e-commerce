@@ -61,7 +61,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	}()
 
 	// Generate hashed password
-	hashedPassword, err := bcrpyt.HashPassword(in.Password)
+	hashedPassword, err := bcrpyt.HashPassword(in.GetPassword())
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %v", err)
 	}
@@ -72,12 +72,12 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	// Execute CreateAccount query using sqlc
 	err = mysql.Queries.CreateAccount(ctx, sqlc.CreateAccountParams{
 		Userid:    userID,
-		Firstname: in.FirstName,
-		Lastname:  in.LastName,
-		Email:     in.Email,
-		Phoneno:   in.PhoneNo,
+		Firstname: in.GetFirstName(),
+		Lastname:  in.GetLastName(),
+		Email:     in.GetEmail(),
+		Phoneno:   in.GetPhoneNo(),
 		Password:  hashedPassword,
-		Rolename:  in.RoleName,
+		Rolename:  in.GetRoleName(),
 	})
 
 	if err != nil {
@@ -120,10 +120,8 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 
 	// Return a successful SignUpResponse
 	return &proto_go.SignUpResponse{
-		Success:        true,
-		Message:        "Account has been created",
-		UserId:         userID,
-		VerificationId: verificationID,
+		Success: true,
+		Message: "Account has been created",
 	}, nil
 }
 
@@ -148,31 +146,27 @@ func (h *AuthenticationHandler) VerifyEmailOTP(ctx context.Context, in *proto_go
 		}
 	}()
 
-	res, err := mysql.Queries.GetOTP(ctx, in.VerificationId)
+	// Get UserID from Email
+	userID, err := mysql.Queries.GetUserIDByEmail(ctx, in.GetEmail())
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to get OTP: %v", err)
+	// Get OTP from database
+	otpRow, err := mysql.Queries.GetOTP(ctx, userID)
+
+	if otpRow.Otp != in.GetOtp() {
+		return nil, fmt.Errorf("invalid OTP")
 	}
 
-	if res.Otp != in.Otp {
-		return nil, fmt.Errorf("OTP does not match")
-	}
-
-	if res.Expiresat.Before(time.Now()) {
+	if !otpRow.Expiresat.Before(time.Now()) {
 		return nil, fmt.Errorf("OTP has expired")
 	}
 
-	err = mysql.Queries.DeleteVerification(ctx, in.VerificationId)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to delete verification: %v", err)
-	}
-
-	err = mysql.Queries.VerifyAccount(ctx, res.Userid)
-
+	// verify user
+	err = mysql.Queries.VerifyAccount(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to verify account: %v", err)
 	}
+
+	err = mysql.Queries.DeleteVerification(ctx, userID)
 
 	return &proto_go.VerifyEmailOTPResponse{
 		Success: true,

@@ -61,29 +61,39 @@ func (q *Queries) CreateVerification(ctx context.Context, arg CreateVerification
 }
 
 const deleteVerification = `-- name: DeleteVerification :exec
-DELETE FROM Verifications WHERE VerificationId = ?
+DELETE FROM Verifications WHERE UserID = ?
 `
 
-func (q *Queries) DeleteVerification(ctx context.Context, verificationid string) error {
-	_, err := q.db.ExecContext(ctx, deleteVerification, verificationid)
+func (q *Queries) DeleteVerification(ctx context.Context, userid string) error {
+	_, err := q.db.ExecContext(ctx, deleteVerification, userid)
 	return err
 }
 
 const getOTP = `-- name: GetOTP :one
-SELECT OTP, UserID, ExpiresAt FROM Verifications WHERE VerificationId = ?
+SELECT OTP, ExpiresAt FROM Verifications WHERE UserID = ?
 `
 
 type GetOTPRow struct {
 	Otp       int32
-	Userid    string
 	Expiresat time.Time
 }
 
-func (q *Queries) GetOTP(ctx context.Context, verificationid string) (GetOTPRow, error) {
-	row := q.db.QueryRowContext(ctx, getOTP, verificationid)
+func (q *Queries) GetOTP(ctx context.Context, userid string) (GetOTPRow, error) {
+	row := q.db.QueryRowContext(ctx, getOTP, userid)
 	var i GetOTPRow
-	err := row.Scan(&i.Otp, &i.Userid, &i.Expiresat)
+	err := row.Scan(&i.Otp, &i.Expiresat)
 	return i, err
+}
+
+const getUserIDByEmail = `-- name: GetUserIDByEmail :one
+SELECT UserID FROM Users WHERE Email = ?
+`
+
+func (q *Queries) GetUserIDByEmail(ctx context.Context, email string) (string, error) {
+	row := q.db.QueryRowContext(ctx, getUserIDByEmail, email)
+	var userid string
+	err := row.Scan(&userid)
+	return userid, err
 }
 
 const verifyAccount = `-- name: VerifyAccount :exec

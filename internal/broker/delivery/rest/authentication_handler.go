@@ -64,7 +64,35 @@ func (s *RestHandler) DisableUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *RestHandler) OTPVerify(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("OTPVerify"))
+	w.Header().Set("Content-Type", "application/json")
+
+	var otp proto_go.VerifyEmailOTPRequest
+	var errs []validation.Error
+
+	if err := json.NewDecoder(r.Body).Decode(&otp); err != nil {
+		errs = append(errs, validation.Error{Name: "Input", Msg: "Invalid input"})
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(errs)
+		return
+	}
+
+	errs = s.validator.OTPVerify(errs, &otp)
+	if len(errs) > 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(errs)
+		return
+	}
+
+	ctx := context.Background()
+	res, err := s.authenticationClient.VerifyEmailOTP(ctx, &otp)
+	if err != nil {
+		errs = append(errs, validation.Error{Name: "Service", Msg: err.Error()})
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(errs)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
 }
 
 func (s *RestHandler) LoginUser(w http.ResponseWriter, r *http.Request) {

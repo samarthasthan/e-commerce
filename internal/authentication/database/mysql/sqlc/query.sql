@@ -7,11 +7,14 @@ VALUES (?,?,?,?,?,?,(SELECT RoleID FROM Roles WHERE RoleName = ?));
 INSERT INTO Verifications (VerificationId, UserID, OTP, ExpiresAt)
 VALUES (?,?,?,?);
 
+-- name: GetUserIDByEmail :one
+SELECT UserID FROM Users WHERE Email = ?;
+
 -- name: GetOTP :one
-SELECT OTP, UserID, ExpiresAt FROM Verifications WHERE VerificationId = ?;
+SELECT OTP, ExpiresAt FROM Verifications WHERE UserID = ?;
 
 -- name: VerifyAccount :exec
 UPDATE Users SET IsVerified = 1 WHERE UserID = ?;
 
 -- name: DeleteVerification :exec
-DELETE FROM Verifications WHERE VerificationId = ?;
+DELETE FROM Verifications WHERE UserID = ?;

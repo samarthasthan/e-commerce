@@ -20,7 +20,7 @@ services:
   mail:
     build:
       context: ../../
-      dockerfile: ./builds/docker/mail/Dockerfile
+      dockerfile: ./build/docker/mail/Dockerfile
     container_name: mail
     image: ecommerce/mail
     networks:

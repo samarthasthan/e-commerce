@@ -1,14 +1,12 @@
 package validation
 
 import (
-	"regexp"
-
 	"github.com/samarthasthan/e-commerce/pkg/proto_go"
 )
 
-func (v *Validator) SignUp(e []Error, u *proto_go.SignUpRequest) []Error {
+func (v *Validator) SignUp(e []Error, in *proto_go.SignUpRequest) []Error {
 	// Validate FirstName
-	if len(u.FirstName) < 5 {
+	if len(in.FirstName) < 5 {
 		e = append(e, Error{
 			Name: "FirstName",
 			Msg:  "FirstName should be min 5 characters long",
@@ -16,47 +14,35 @@ func (v *Validator) SignUp(e []Error, u *proto_go.SignUpRequest) []Error {
 	}
 
 	// Validate LastName
-	if len(u.LastName) < 5 {
+	if len(in.LastName) < 5 {
 		e = append(e, Error{
 			Name: "LastName",
 			Msg:  "LastName should be min 5 characters long",
 		})
 	}
 
-	// Validate Email
-	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-	if !emailRegex.MatchString(u.Email) {
-		e = append(e, Error{
-			Name: "Email",
-			Msg:  "Invalid email format",
-		})
-	}
+	v.Email(e, in.Email)
 
-	// Validate PhoneNo
-	phoneRegex := regexp.MustCompile(`^[0-9]{10}$`)
-	if !phoneRegex.MatchString(u.PhoneNo) {
-		e = append(e, Error{
-			Name: "PhoneNo",
-			Msg:  "Invalid phone number format",
-		})
-	}
+	v.PhoneNo(e, in.PhoneNo)
 
-	// Validate Password
-	passwordRegex := regexp.MustCompile(`^[A-Za-z0-9!@#$%^&*]{8,}$`)
-	if !passwordRegex.MatchString(u.Password) {
-		e = append(e, Error{
-			Name: "Password",
-			Msg:  "Password should have at least 8 characters long",
-		})
-	}
+	v.Password(e, in.Password)
 
 	// Validate RoleName
-	if len(u.RoleName) < 1 {
+	if len(in.RoleName) < 1 {
 		e = append(e, Error{
 			Name: "RoleName",
 			Msg:  "RoleName should be min 5 characters long",
 		})
 	}
+
+	return e
+}
+
+func (v *Validator) OTPVerify(e []Error, in *proto_go.VerifyEmailOTPRequest) []Error {
+
+	v.Email(e, in.Email)
+
+	v.OTP(e, in.Otp)
 
 	return e
 }

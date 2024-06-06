@@ -65,14 +65,8 @@ func (s *RestHandler) Handle() {
 	)
 
 	s.mux.Handle("/metrics", promhttp.Handler())
-	s.mux.Handle("GET /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.GetUser))))
-	s.mux.Handle("POST /user", MetricsMiddleware(http.HandlerFunc(s.CreateUser)))
-	s.mux.Handle("PUT /user", zipkinMiddleWare(MetricsMiddleware(http.HandlerFunc(s.UpdateUser))))
-	s.mux.Handle("DELETE /user", MetricsMiddleware(http.HandlerFunc(s.DeleteUser)))
-	s.mux.Handle("POST /user-disable", MetricsMiddleware(http.HandlerFunc(s.DisableUser)))
-	s.mux.Handle("POST /otp-verify", MetricsMiddleware(http.HandlerFunc(s.OTPVerify)))
-	s.mux.Handle("POST /login", MetricsMiddleware(http.HandlerFunc(s.LoginUser)))
-	s.mux.Handle("POST /forgot-password", MetricsMiddleware(http.HandlerFunc(s.ForgotPassword)))
+	s.mux.Handle("POST /user", MetricsMiddleware(zipkinMiddleWare(http.HandlerFunc(s.CreateUser))))
+	s.mux.Handle("POST /otp-verify", MetricsMiddleware(zipkinMiddleWare(http.HandlerFunc(s.OTPVerify))))
 }
 
 func (s *RestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
