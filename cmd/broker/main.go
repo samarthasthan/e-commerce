@@ -14,12 +14,14 @@ import (
 
 var (
 	BROKER_REST_PORT         string
+	AUTHENTICATION_GRPC_HOST string
 	AUTHENTICATION_GRPC_PORT string
 )
 
 func init() {
 	BROKER_REST_PORT = env.GetEnv("BROKER_REST_PORT", "7000")
 	AUTHENTICATION_GRPC_PORT = env.GetEnv("AUTHENTICATION_GRPC_PORT", "8000")
+	AUTHENTICATION_GRPC_HOST = env.GetEnv("AUTHENTICATION_GRPC_HOST", "localhost")
 }
 
 func main() {
@@ -37,7 +39,7 @@ func main() {
 	validator := validation.NewValidator()
 
 	authentitcationClient := grpc_clients.NewAuthenticationClient(log, tracer)
-	if ac_err := authentitcationClient.Connect(AUTHENTICATION_GRPC_PORT); ac_err != nil {
+	if ac_err := authentitcationClient.Connect(AUTHENTICATION_GRPC_HOST, AUTHENTICATION_GRPC_PORT); ac_err != nil {
 		log.Errorf("Broker not able to connect to Authentication service, msg %v", ac_err.Error())
 
 	}

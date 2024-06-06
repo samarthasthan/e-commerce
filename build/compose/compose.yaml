@@ -1,101 +1,158 @@
 services:
-  # Micro-Services
-  #Broker
+  # Kafka
+  kafka:
+    build:
+      context: ../docker/kafka
+      dockerfile: ./Dockerfile
+    container_name: kafka
+    ports:
+      - ${KAFKA_EXTERNAL_PORT}:9092
+    networks:
+      - ecommerce
+    healthcheck:
+      test:
+        ["CMD-SHELL", "./wait-for.sh kafka:${KAFKA_PORT} -- ./kafka_setup.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 100
+      start_period: 10s
+
   broker:
     build:
       context: ../../
-      dockerfile: ./builds/docker/broker/Dockerfile
+      dockerfile: ./build/docker/broker/Dockerfile
     container_name: broker
-    image: ecommerce/broker
     networks:
       - ecommerce
     environment:
-      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - BROKER_REST_PORT=${BROKER_REST_PORT}
+      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
+      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
       - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
     ports:
-      - "${BROKER_REST_PORT}:${BROKER_REST_PORT}"
-      - "${BROKER_GRAPHQL_PORT}:${BROKER_GRAPHQL_PORT}"
+      - ${BROKER_REST_PORT}:${BROKER_REST_PORT}
     command: ["./app"]
     depends_on:
-      - grafana
+      kafka:
+        condition: service_healthy 
 
-  #Authentication
+  mail:
+    build:
+      context: ../../
+      dockerfile: ./build/docker/mail/Dockerfile
+    container_name: mail
+    networks:
+      - ecommerce
+    environment:
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_LOGIN=${SMTP_LOGIN}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
+    command: ["./app"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    
   authentication:
     build:
       context: ../../
-      dockerfile: ./builds/docker/authentication/Dockerfile
+      dockerfile: ./build/docker/authentication/Dockerfile
     container_name: authentication
-    image: ecommerce/authentication
+    networks:
+      - ecommerce
     environment:
       - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
-      - AUTHENTICATION_MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
+      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
       - AUTHENTICATION_MYSQL_PORT=${AUTHENTICATION_MYSQL_PORT}
+      - AUTHENTICATION_MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
       - AUTHENTICATION_MYSQL_HOST=${AUTHENTICATION_MYSQL_HOST}
       - AUTHENTICATION_REDIS_PORT=${AUTHENTICATION_REDIS_PORT}
-      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - AUTHENTICATION_REDIS_HOST=  ${AUTHENTICATION_REDIS_HOST}
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
       - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
-    networks:
-      - ecommerce
-    ports:
-      - "${AUTHENTICATION_GRPC_PORT}:${AUTHENTICATION_GRPC_PORT}"
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
+
     command: ["./app"]
     depends_on:
-      - grafana
+      kafka:
+        condition: service_healthy
 
-  # Account
-  account:
-    build:
-      context: ../../
-      dockerfile: ./builds/docker/account/Dockerfile
-    container_name: account
-    image: ecommerce/account
+  # Databases
+  auth-mysql:
+    image: mysql:latest
+    container_name: auth-mysql
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTHENTICATION_MYSQL_PORT}:3306"
     environment:
-      - ACCOUNT_MONGO_ROOT_PORT=${ACCOUNT_MONGO_ROOT_PORT}
-      - ACCOUNT_MONGO_ROOT_USERNAME=${ACCOUNT_MONGO_ROOT_USERNAME}
-      - ACCOUNT_MONGO_ROOT_PASSWORD=${ACCOUNT_MONGO_ROOT_PASSWORD}
-      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
-      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
-    networks:
-      - ecommerce
-    ports:
-      - "${ACCOUNT_GRPC_PORT}:${ACCOUNT_GRPC_PORT}"
+      - MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=authentication
 
-  #Frontend
-  #Admin portal
-  admin-portal:
-    build:
-      context: ../../
-      dockerfile: ./builds/docker/frontend/admin-portal/Dockerfile
-    container_name: admin-portal
-    image: ecommerce/admin-portal
+  auth-redis:
+    image: redis:latest
+    container_name: auth-redis
     networks:
       - ecommerce
     ports:
-      - "${ADMIN_PORTAL_PORT}:3000"
+      - "${AUTHENTICATION_REDIS_PORT}:6379"
+    
+  # Metrics, Logging and Tracing
+  loki:
+    image: grafana/loki
+    container_name: loki
+    networks:
+      - ecommerce
+    ports:
+      - "${GRAFANA_LOKI_PORT}:3100"
 
-  #Seller portal
-  seller-portal:
-    build:
-      context: ../../
-      dockerfile: ./builds/docker/frontend/seller-portal/Dockerfile
-    container_name: seller-portal
-    image: ecommerce/seller-portal
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
     networks:
       - ecommerce
     ports:
-      - "${VENDOR_PORTAL_PORT}:3000"
+      - "${GRAFANA_PORT}:3000"
+    depends_on:
+      - loki
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SECURITY_ADMIN_USER=samarth
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    volumes:
+      - ../../config/grafana:/etc/grafana/provisioning
+      - ../../config/grafana/dashboards:/var/lib/grafana/dashboards
 
-  #Website
-  website:
-    build:
-      context: ../../
-      dockerfile: ./builds/docker/frontend/website/Dockerfile
-    container_name: website
-    image: ecommerce/website
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    networks:
+      - ecommerce
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    restart: unless-stopped
+    volumes:
+      - ../../config/prometheus:/etc/prometheus
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
     networks:
       - ecommerce
     ports:
-      - "${WEBSITE_PORT}:3000"
+      - "9411:9411"
 
 networks:
   ecommerce:

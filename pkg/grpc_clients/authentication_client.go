@@ -26,8 +26,8 @@ func (a *AuthenticationClient) GetClient() *proto_go.AuthenticationServiceClient
 	return &a.Client
 }
 
-func (a *AuthenticationClient) Connect(addr string) error {
-	err := a.baseClient.Connect(fmt.Sprintf("localhost:%v", addr))
+func (a *AuthenticationClient) Connect(host string, addr string) error {
+	err := a.baseClient.Connect(fmt.Sprintf("%s:%s", host, addr))
 	if err != nil {
 		return err
 	}
