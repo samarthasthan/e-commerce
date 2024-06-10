@@ -60,7 +60,7 @@ To get started with the project, follow these steps:
 
 1. Clone the repository.
 2. Install Docker and Docker Compose.
-3. Run `make up-prod` or `docker-compose -f ./build/compose/compose.prod.yaml` to start the services.
+3. Run `make up-dev` or `docker-compose -f ./build/compose/compose.dev.yaml` to start the services.
 4. Access the respective portals and websites via the provided URLs.
 
 
@@ -95,6 +95,3 @@ For any questions, suggestions, or further assistance, feel free to reach out:
 
 - **Twitter**: [@samarthasthan](https://twitter.com/samarthasthan)
 - **Email**: [samarthasthan27@gmail.com](mailto:samarthasthan27@gmail.com)
-
-##
-Note: For daily updates, check the development branch.
