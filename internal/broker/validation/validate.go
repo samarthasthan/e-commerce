@@ -22,7 +22,7 @@ func NewValidator() *Validator {
 
 func (v *Validator) Password(e []Error, ps string) []Error {
 	// Validate Password
-	passwordRegex := regexp.MustCompile(`^[A-Za-z0-9!@#$%^&*]{8,}$`)
+	passwordRegex := regexp.MustCompile(`[0-9|a-z|A-Z]`)
 	if !passwordRegex.MatchString(ps) {
 		e = append(e, Error{
 			Name: "Password",

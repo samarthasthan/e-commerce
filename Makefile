@@ -13,26 +13,37 @@ grpc-clean:
 	@echo "Clean completed."
 
 # Run in Production mode
-up-prod:
+prod-up:
 	@echo "Running in Production mode..."
+	@make migrate-up
 	@docker compose -f ./build/compose/compose.prod.yaml up -d
 	@echo "Production mode completed."
 
-# Run in Development mode
-up-dev:
-	@echo "Running in Development mode..."
-	@docker compose -f ./build/compose/compose.dev.yaml up -d
-	@echo "Development mode completed."
 
 # Down in Production mode
-down-prod:
+prod-down:
 	@echo "Running in Production mode..."
 	@docker compose -f ./build/compose/compose.prod.yaml down
 	@echo "Production mode completed."
 
-# Down in Development mode
-down-dev:
+# Run in Development mode
+dev-up:
 	@echo "Running in Development mode..."
+	@docker compose -f ./build/compose/compose.dev.yaml up -d --no-deps --build
+	@make migrate-up
+	@echo "Development mode completed."
+
+# Reload in Development mode
+dev-reload:
+	@echo "Reloading in Development mode..."
+	@docker compose -f ./build/compose/compose.dev.yaml pull
+	@docker compose -f ./build/compose/compose.dev.yaml up -d --build
+	@echo "Reload completed."
+	
+# Down in Development mode
+dev-down:
+	@echo "Running in Development mode..."
+	# @make migrate-down
 	@docker compose -f ./build/compose/compose.dev.yaml down --volumes
 	@echo "Development mode completed."
 
@@ -45,7 +56,13 @@ migrate-up:
 # Delete migrations
 migrate-down:
 	@echo "Deleting migrations..."
-	@migrate -path ./internal/authentication/database/mysql/migrations -database "mysql://root:password@tcp(localhost:3306)/authentication" -verbose down	@echo "Migrations deleted."
+	@migrate -path ./internal/authentication/database/mysql/migrations -database "mysql://root:password@tcp(localhost:3306)/authentication" -verbose down
+
+# SQLC generate
+sqlc-gen:
+	@echo "Generating SQLC..."
+	@sqlc generate -f ./internal/authentication/database/mysql/sqlc/sqlc.yaml
+	@echo "SQLC generation completed."
 
 # Unit tests
 unit-test:

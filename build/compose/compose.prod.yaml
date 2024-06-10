@@ -81,7 +81,6 @@ services:
       - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
       - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
       - ZIPKIN_HOST=${ZIPKIN_HOST}
-
     command: ["./app"]
     depends_on:
       kafka:

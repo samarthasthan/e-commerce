@@ -125,6 +125,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	}, nil
 }
 
+// VerifyEmailOTP handles the VerifyEmailOTP gRPC request
 func (h *AuthenticationHandler) VerifyEmailOTP(ctx context.Context, in *proto_go.VerifyEmailOTPRequest) (*proto_go.VerifyEmailOTPResponse, error) {
 	// Type assertion for MySQL
 	mysql, ok := h.mysql.(*database.MySQL)
@@ -171,5 +172,26 @@ func (h *AuthenticationHandler) VerifyEmailOTP(ctx context.Context, in *proto_go
 	return &proto_go.VerifyEmailOTPResponse{
 		Success: true,
 		Message: "Account has been verified",
+	}, nil
+}
+
+// Login handles the Login gRPC request
+func (h *AuthenticationHandler) SignIn(ctx context.Context, in *proto_go.SignInRequest) (*proto_go.SignInResponse, error) {
+	mysql, ok := h.mysql.(*database.MySQL)
+	if !ok {
+		return nil, fmt.Errorf("mysql is not of type *database.MySQL")
+	}
+
+	pass, err := mysql.Queries.GetPasswordByEmail(ctx, in.GetEmail())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get password: %v", err)
+	}
+
+	if !bcrpyt.ValidatePassword(in.GetPassword(), pass) {
+		return nil, fmt.Errorf("invalid password")
+	}
+	return &proto_go.SignInResponse{
+		SessionId: "123456",
+		Message:   "Login successful",
 	}, nil
 }

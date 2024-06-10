@@ -18,3 +18,6 @@ UPDATE Users SET IsVerified = 1 WHERE UserID = ?;
 
 -- name: DeleteVerification :exec
 DELETE FROM Verifications WHERE UserID = ?;
+
+-- name: GetPasswordByEmail :one
+SELECT Password FROM Users WHERE Email = ?;

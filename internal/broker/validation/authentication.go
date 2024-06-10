@@ -46,3 +46,12 @@ func (v *Validator) OTPVerify(e []Error, in *proto_go.VerifyEmailOTPRequest) []E
 
 	return e
 }
+
+func (v *Validator) SignIn(e []Error, in *proto_go.SignInRequest) []Error {
+
+	v.Email(e, in.Email)
+
+	v.Password(e, in.Password)
+
+	return e
+}
