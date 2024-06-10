@@ -1,0 +1,160 @@
+services:
+  # Kafka
+  kafka:
+    build:
+      context: ../docker/kafka
+      dockerfile: ./Dockerfile
+    container_name: kafka
+    ports:
+      - ${KAFKA_EXTERNAL_PORT}:9092
+    networks:
+      - ecommerce
+    healthcheck:
+      test:
+        ["CMD-SHELL", "./wait-for.sh kafka:${KAFKA_PORT} -- ./kafka_setup.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 100
+      start_period: 10s
+
+  # Services
+  broker:
+    build:
+      context: ../../
+      dockerfile: ./build/docker/broker/Dockerfile
+    container_name: broker
+    networks:
+      - ecommerce
+    environment:
+      - BROKER_REST_PORT=${BROKER_REST_PORT}
+      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
+      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
+    ports:
+      - ${BROKER_REST_PORT}:${BROKER_REST_PORT}
+    command: ["./app"]
+    depends_on:
+      kafka:
+        condition: service_healthy 
+
+  mail:
+    build:
+      context: ../../
+      dockerfile: ./build/docker/mail/Dockerfile
+    container_name: mail
+    networks:
+      - ecommerce
+    environment:
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_LOGIN=${SMTP_LOGIN}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
+    command: ["./app"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    
+  authentication:
+    build:
+      context: ../../
+      dockerfile: ./build/docker/authentication/Dockerfile
+    container_name: authentication
+    networks:
+      - ecommerce
+    environment:
+      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
+      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
+      - AUTHENTICATION_MYSQL_PORT=${AUTHENTICATION_MYSQL_PORT}
+      - AUTHENTICATION_MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
+      - AUTHENTICATION_MYSQL_HOST=${AUTHENTICATION_MYSQL_HOST}
+      - AUTHENTICATION_REDIS_PORT=${AUTHENTICATION_REDIS_PORT}
+      - AUTHENTICATION_REDIS_HOST=  ${AUTHENTICATION_REDIS_HOST}
+      - KAFKA_PORT=${KAFKA_PORT}
+      - KAFKA_HOST=${KAFKA_HOST}
+      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
+      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
+      - ZIPKIN_HOST=${ZIPKIN_HOST}
+
+    command: ["./app"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+
+  # Databases
+  auth-mysql:
+    image: mysql:latest
+    container_name: auth-mysql
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTHENTICATION_MYSQL_PORT}:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=authentication
+
+  auth-redis:
+    image: redis:latest
+    container_name: auth-redis
+    networks:
+      - ecommerce
+    ports:
+      - "${AUTHENTICATION_REDIS_PORT}:6379"
+    
+  # Metrics, Logging and Tracing
+  loki:
+    image: grafana/loki
+    container_name: loki
+    networks:
+      - ecommerce
+    ports:
+      - "${GRAFANA_LOKI_PORT}:3100"
+
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    networks:
+      - ecommerce
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    depends_on:
+      - loki
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SECURITY_ADMIN_USER=samarth
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    volumes:
+      - ../../config/grafana:/etc/grafana/provisioning
+      - ../../config/grafana/dashboards:/var/lib/grafana/dashboards
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    networks:
+      - ecommerce
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    restart: unless-stopped
+    volumes:
+      - ../../config/prometheus:/etc/prometheus
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    networks:
+      - ecommerce
+    ports:
+      - "9411:9411"
+
+networks:
+  ecommerce:
+    driver: bridge
