@@ -15,25 +15,25 @@ grpc-clean:
 # Run in Production mode
 up-prod:
 	@echo "Running in Production mode..."
-	@docker compose -f ./build/compose/compose.prod.yml up
+	@docker compose -f ./build/compose/compose.prod.yaml up -d
 	@echo "Production mode completed."
 
 # Run in Development mode
 up-dev:
 	@echo "Running in Development mode..."
-	@docker compose -f ./build/compose/compose.dev.yml up
+	@docker compose -f ./build/compose/compose.dev.yaml up -d
 	@echo "Development mode completed."
 
 # Down in Production mode
 down-prod:
 	@echo "Running in Production mode..."
-	@docker compose -f ./build/compose/compose.prod.yml up
+	@docker compose -f ./build/compose/compose.prod.yaml down
 	@echo "Production mode completed."
 
 # Down in Development mode
 down-dev:
 	@echo "Running in Development mode..."
-	@docker compose -f ./build/compose/compose.dev.yml up
+	@docker compose -f ./build/compose/compose.dev.yaml down --volumes
 	@echo "Development mode completed."
 
 # Make migrations
@@ -46,3 +46,9 @@ migrate-up:
 migrate-down:
 	@echo "Deleting migrations..."
 	@migrate -path ./internal/authentication/database/mysql/migrations -database "mysql://root:password@tcp(localhost:3306)/authentication" -verbose down	@echo "Migrations deleted."
+
+# Unit tests
+unit-test:
+	@echo "Running unit tests..."
+	@go test -v ./...
+	@echo "Unit tests completed."
