@@ -58,9 +58,8 @@ func main() {
 
 	// Initialising Databases
 	mysql := database.NewMySQL()
-
 	redis := database.NewRedis()
-	err = mysql.Connect(mysql.RegisterZipkin(sqlt), fmt.Sprintf("root:%s@tcp(%s:%s)/authentication", AUTHENTICATION_MYSQL_ROOT_PASSWORD, AUTHENTICATION_MYSQL_HOST, AUTHENTICATION_MYSQL_PORT))
+	err = mysql.Connect(mysql.RegisterZipkin(sqlt), fmt.Sprintf("root:%s@tcp(%s:%s)/authentication?parseTime=true", AUTHENTICATION_MYSQL_ROOT_PASSWORD, AUTHENTICATION_MYSQL_HOST, AUTHENTICATION_MYSQL_PORT))
 	if err != nil {
 		log.Println(err.Error())
 	}

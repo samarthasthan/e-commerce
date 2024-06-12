@@ -67,6 +67,7 @@ func (s *RestHandler) Handle() {
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("POST /user", MetricsMiddleware(zipkinMiddleWare(http.HandlerFunc(s.CreateUser))))
 	s.mux.Handle("POST /otp-verify", MetricsMiddleware(zipkinMiddleWare(http.HandlerFunc(s.OTPVerify))))
+	s.mux.Handle("POST /sign-in", MetricsMiddleware(zipkinMiddleWare(http.HandlerFunc(s.SignInUser))))
 }
 
 func (s *RestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

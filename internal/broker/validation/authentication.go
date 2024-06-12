@@ -21,11 +21,11 @@ func (v *Validator) SignUp(e []Error, in *proto_go.SignUpRequest) []Error {
 		})
 	}
 
-	v.Email(e, in.Email)
+	e = v.Email(e, in.Email)
 
-	v.PhoneNo(e, in.PhoneNo)
+	e = v.PhoneNo(e, in.PhoneNo)
 
-	v.Password(e, in.Password)
+	e = v.Password(e, in.Password)
 
 	// Validate RoleName
 	if len(in.RoleName) < 1 {
@@ -34,15 +34,23 @@ func (v *Validator) SignUp(e []Error, in *proto_go.SignUpRequest) []Error {
 			Msg:  "RoleName should be min 5 characters long",
 		})
 	}
-
 	return e
 }
 
 func (v *Validator) OTPVerify(e []Error, in *proto_go.VerifyEmailOTPRequest) []Error {
 
-	v.Email(e, in.Email)
+	e = v.Email(e, in.Email)
 
-	v.OTP(e, in.Otp)
+	e = v.OTP(e, in.Otp)
+
+	return e
+}
+
+func (v *Validator) SignIn(e []Error, in *proto_go.SignInRequest) []Error {
+
+	e = v.Email(e, in.Email)
+
+	e = v.Password(e, in.Password)
 
 	return e
 }

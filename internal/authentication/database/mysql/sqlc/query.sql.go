@@ -85,6 +85,17 @@ func (q *Queries) GetOTP(ctx context.Context, userid string) (GetOTPRow, error) 
 	return i, err
 }
 
+const getPasswordByEmail = `-- name: GetPasswordByEmail :one
+SELECT Password FROM Users WHERE Email = ?
+`
+
+func (q *Queries) GetPasswordByEmail(ctx context.Context, email string) (string, error) {
+	row := q.db.QueryRowContext(ctx, getPasswordByEmail, email)
+	var password string
+	err := row.Scan(&password)
+	return password, err
+}
+
 const getUserIDByEmail = `-- name: GetUserIDByEmail :one
 SELECT UserID FROM Users WHERE Email = ?
 `

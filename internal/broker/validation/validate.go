@@ -2,6 +2,7 @@ package validation
 
 import (
 	"regexp"
+	"strconv"
 )
 
 type Validator struct {
@@ -21,14 +22,51 @@ func NewValidator() *Validator {
 }
 
 func (v *Validator) Password(e []Error, ps string) []Error {
-	// Validate Password
-	passwordRegex := regexp.MustCompile(`^[A-Za-z0-9!@#$%^&*]{8,}$`)
-	if !passwordRegex.MatchString(ps) {
+	// Check password length
+	if len(ps) < 8 || len(ps) > 16 {
 		e = append(e, Error{
 			Name: "Password",
-			Msg:  "Password should have at least 8 characters long",
+			Msg:  "Password should be 8-16 characters long",
 		})
+		return e
 	}
+
+	// Check for at least one digit
+	if !regexp.MustCompile(`[0-9]`).MatchString(ps) {
+		e = append(e, Error{
+			Name: "Password",
+			Msg:  "Password should contain at least one digit",
+		})
+		return e
+	}
+
+	// Check for at least one lowercase letter
+	if !regexp.MustCompile(`[a-z]`).MatchString(ps) {
+		e = append(e, Error{
+			Name: "Password",
+			Msg:  "Password should contain at least one lowercase letter",
+		})
+		return e
+	}
+
+	// Check for at least one uppercase letter
+	if !regexp.MustCompile(`[A-Z]`).MatchString(ps) {
+		e = append(e, Error{
+			Name: "Password",
+			Msg:  "Password should contain at least one uppercase letter",
+		})
+		return e
+	}
+
+	// Check for at least one special character
+	if !regexp.MustCompile(`[\W_]`).MatchString(ps) {
+		e = append(e, Error{
+			Name: "Password",
+			Msg:  "Password should contain at least one special character",
+		})
+		return e
+	}
+
 	return e
 }
 
@@ -59,7 +97,7 @@ func (v *Validator) Email(e []Error, em string) []Error {
 func (v *Validator) OTP(e []Error, otp int32) []Error {
 	// Validate OTP
 	otpRegex := regexp.MustCompile(`^[0-9]{6,6}$`)
-	if !otpRegex.Match([]byte{byte(otp)}) {
+	if !otpRegex.MatchString(strconv.Itoa(int(otp))) {
 		e = append(e, Error{
 			Name: "OTP",
 			Msg:  "Invalid OTP format",
