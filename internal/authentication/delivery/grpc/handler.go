@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database"
 	"github.com/samarthasthan/e-commerce/internal/authentication/database/mysql/sqlc"
+	constants "github.com/samarthasthan/e-commerce/pkg"
 	"github.com/samarthasthan/e-commerce/pkg/bcrpyt"
 	"github.com/samarthasthan/e-commerce/pkg/kafka"
 	"github.com/samarthasthan/e-commerce/pkg/models"
@@ -93,7 +94,7 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 		Verificationid: verificationID,
 		Userid:         userID,
 		Otp:            int32(OTP),
-		Expiresat:      time.Now().Add(time.Minute * 10),
+		Expiresat:      time.Now().Add(constants.OTPExpirationTime),
 	})
 
 	if err != nil {
@@ -108,8 +109,8 @@ func (h *AuthenticationHandler) SignUp(ctx context.Context, in *proto_go.SignUpR
 	// Create a new Mail struct
 	mail := &models.Mail{
 		To:      in.Email,
-		Subject: "Welcome to E-commerce",
-		Body:    fmt.Sprintf("Your OTP for e-commerce is %d", OTP),
+		Subject: fmt.Sprintf("Welcome to %s", constants.SoftwareName),
+		Body:    fmt.Sprintf("Your OTP for %s %d", constants.SoftwareName, OTP),
 	}
 
 	// Produce a message to the mail topic
@@ -149,15 +150,23 @@ func (h *AuthenticationHandler) VerifyEmailOTP(ctx context.Context, in *proto_go
 
 	// Get UserID from Email
 	userID, err := mysql.Queries.GetUserIDByEmail(ctx, in.GetEmail())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user id: %v", err)
+	}
 
 	// Get OTP from database
 	otpRow, err := mysql.Queries.GetOTP(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get OTP: %v", err)
+	}
 
+	// Check if OTP is valid
 	if otpRow.Otp != in.GetOtp() {
 		return nil, fmt.Errorf("invalid OTP")
 	}
 
-	if !otpRow.Expiresat.Before(time.Now()) {
+	// Check if OTP has expired
+	if utils.CheckOTPExpiration(otpRow.Expiresat) == false {
 		return nil, fmt.Errorf("OTP has expired")
 	}
 

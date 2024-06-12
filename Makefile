@@ -43,7 +43,7 @@ dev-reload:
 # Down in Development mode
 dev-down:
 	@echo "Running in Development mode..."
-	# @make migrate-down
+	@make migrate-down
 	@docker compose -f ./build/compose/compose.dev.yaml down --volumes
 	@echo "Development mode completed."
 

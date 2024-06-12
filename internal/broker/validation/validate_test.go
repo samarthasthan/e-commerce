@@ -51,7 +51,7 @@ func TestEmail(t *testing.T) {
 	}
 
 	clear(e)
-	e = validation.Email(e, "samarthasthan9411gmail.com")
+	e = validation.Email(e, "samarthasthan5gmail.com")
 	if len(e) == 0 {
 		t.Errorf("Expected 1 error, got %v", len(e))
 	}
