@@ -196,7 +196,7 @@ func (h *AuthenticationHandler) SignIn(ctx context.Context, in *proto_go.SignInR
 		return nil, fmt.Errorf("failed to get password: %v", err)
 	}
 
-	if !bcrpyt.ValidatePassword(in.GetPassword(), pass) {
+	if !bcrpyt.ValidatePassword(pass, in.GetPassword()) {
 		return nil, fmt.Errorf("invalid password")
 	}
 	return &proto_go.SignInResponse{

@@ -18,27 +18,6 @@ services:
       start_period: 10s
 
   # Services
-  broker:
-    build:
-      context: ../../
-      dockerfile: ./build/docker/broker/Dockerfile
-    container_name: broker
-    networks:
-      - ecommerce
-    environment:
-      - BROKER_REST_PORT=${BROKER_REST_PORT}
-      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
-      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
-      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
-      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
-      - ZIPKIN_HOST=${ZIPKIN_HOST}
-    ports:
-      - ${BROKER_REST_PORT}:${BROKER_REST_PORT}
-    command: ["./app"]
-    depends_on:
-      kafka:
-        condition: service_healthy 
-
   mail:
     build:
       context: ../../
@@ -51,31 +30,6 @@ services:
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_LOGIN=${SMTP_LOGIN}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - KAFKA_PORT=${KAFKA_PORT}
-      - KAFKA_HOST=${KAFKA_HOST}
-      - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
-      - GRAFANA_LOKI_HOST=${GRAFANA_LOKI_HOST}
-      - ZIPKIN_HOST=${ZIPKIN_HOST}
-    command: ["./app"]
-    depends_on:
-      kafka:
-        condition: service_healthy
-    
-  authentication:
-    build:
-      context: ../../
-      dockerfile: ./build/docker/authentication/Dockerfile
-    container_name: authentication
-    networks:
-      - ecommerce
-    environment:
-      - AUTHENTICATION_GRPC_PORT=${AUTHENTICATION_GRPC_PORT}
-      - AUTHENTICATION_GRPC_HOST=${AUTHENTICATION_GRPC_HOST}
-      - AUTHENTICATION_MYSQL_PORT=${AUTHENTICATION_MYSQL_PORT}
-      - AUTHENTICATION_MYSQL_ROOT_PASSWORD=${AUTHENTICATION_MYSQL_ROOT_PASSWORD}
-      - AUTHENTICATION_MYSQL_HOST=${AUTHENTICATION_MYSQL_HOST}
-      - AUTHENTICATION_REDIS_PORT=${AUTHENTICATION_REDIS_PORT}
-      - AUTHENTICATION_REDIS_HOST=  ${AUTHENTICATION_REDIS_HOST}
       - KAFKA_PORT=${KAFKA_PORT}
       - KAFKA_HOST=${KAFKA_HOST}
       - GRAFANA_LOKI_PORT=${GRAFANA_LOKI_PORT}
@@ -105,7 +59,7 @@ services:
       - ecommerce
     ports:
       - "${AUTHENTICATION_REDIS_PORT}:6379"
-    
+
   # Metrics, Logging and Tracing
   loki:
     image: grafana/loki

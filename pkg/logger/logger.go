@@ -15,7 +15,7 @@ func init() {
 
 var (
 	LOKI_HOST = env.GetEnv("GRAFANA_LOKI_HOST", "localhost")
-	LOKI_PORT = env.GetEnv("GRAFANA_LOKI_PORT", "15001")
+	LOKI_PORT = env.GetEnv("GRAFANA_LOKI_PORT", "3100")
 )
 
 type Logger struct {

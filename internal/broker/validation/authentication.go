@@ -8,16 +8,16 @@ func (v *Validator) SignUp(e []Error, in *proto_go.SignUpRequest) []Error {
 	// Validate FirstName
 	if len(in.FirstName) < 5 {
 		e = append(e, Error{
-			Name: "FirstName",
-			Msg:  "FirstName should be min 5 characters long",
+			Name: "first_name",
+			Msg:  "First Name should be min 5 characters long",
 		})
 	}
 
 	// Validate LastName
 	if len(in.LastName) < 5 {
 		e = append(e, Error{
-			Name: "LastName",
-			Msg:  "LastName should be min 5 characters long",
+			Name: "last_name",
+			Msg:  "Last Name should be min 5 characters long",
 		})
 	}
 
@@ -30,7 +30,7 @@ func (v *Validator) SignUp(e []Error, in *proto_go.SignUpRequest) []Error {
 	// Validate RoleName
 	if len(in.RoleName) < 1 {
 		e = append(e, Error{
-			Name: "RoleName",
+			Name: "role_name",
 			Msg:  "RoleName should be min 5 characters long",
 		})
 	}

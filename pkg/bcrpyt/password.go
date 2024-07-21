@@ -1,6 +1,8 @@
 package bcrpyt
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 // HashPassword hashes a plaintext password using bcrypt with the given cost factor.
 func HashPassword(password string) (string, error) {
